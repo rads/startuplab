@@ -2,7 +2,7 @@ import dj_database_url, os
 import logging
 # Django settings for webapp project.
 
-DEBUG = True
+DEBUG = os.environ.get('ISDEVENV', True)
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -107,6 +107,9 @@ ROOT_URLCONF = 'webapp.urls'
 WSGI_APPLICATION = 'webapp.wsgi.application'
 
 TEMPLATE_DIRS = (
+    # this is so that we can use the same relative paths on heroku
+    os.path.join(os.path.dirname(__file__), 'templates').replace('\\', '/'),
+    
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
