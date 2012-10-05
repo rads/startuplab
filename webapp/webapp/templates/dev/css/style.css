@@ -1,0 +1,16 @@
+input {
+font: 22px/24px 'GillSans', sans-serif;
+color: #cecece;
+border: none;
+padding: 10px;
+width: 385px;
+margin: 0;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+-khtml-border-radius: 8px;
+border-radius: 8px;
+-moz-box-shadow: 1px 1px 5px #555;
+-webkit-box-shadow: 1px 1px 5px #555;
+box-shadow: 1px 1px 5px #555;
+float: left;
+}
