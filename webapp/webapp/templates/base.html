@@ -1,13 +1,21 @@
+<!DOCTYPE html>
 <html>
-<head><title>{% block title %} STARTUP LAB {% endblock %}</title></head>
-<body>
-    {% if user.username %}
-        logged in as: {{ user.username }}
-    {% else %}
-        not logged in
-    {% endif %}
-
+  <head>
+  <title>{% block title %} THE TITLE {% endblock %}</title>
+    <link href="/static/css/style.css" rel="stylesheet">
+  </head>
+  <body>
+  
+  <div id="header">
+    <div class ="heading">startup name</div>
+  </div>
+  
+  <div id="container">
+  <div id="single">
     {% block content %}
-    {% endblock %}
-</body>
+    {% endblock %} 
+  </div>
+  </div>
+  
+  </body>
 </html>
