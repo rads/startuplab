@@ -11,6 +11,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# sets up DB config for Heroku
 DATABASES = {
     'default': dj_database_url.config(default='postgres://localhost')
 }
@@ -129,6 +130,8 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
+
+AUTH_PROFILE_MODULE = "UserProfile"
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -1,0 +1,13 @@
+<html>
+<head><title>{% block title %} STARTUP LAB {% endblock %}</title></head>
+<body>
+    {% if user.username %}
+        logged in as: {{ user.username }}
+    {% else %}
+        not logged in
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+</body>
+</html>
