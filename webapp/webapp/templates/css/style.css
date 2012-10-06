@@ -1,0 +1,164 @@
+@font-face {
+    font-family: 'GillSans';
+    src: url('../fonts/gillsansmtpro-book.eot');
+    src: url('../fonts/gillsansmtpro-book.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/gillsansmtpro-book.woff') format('woff'),
+         url('../fonts/gillsansmtpro-book.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+
+}
+body {
+background: #FFF no-repeat top;
+color: #505050;
+font: 14px/17px 'GillSans', sans-serif;
+margin: 0;
+padding-top: 64px;
+}
+img {
+border: 0;
+}
+#header {
+width: 100%;
+background: #444 no-repeat top;
+margin: -64px 0 0 0;
+height: 64px;
+-moz-box-shadow: 0 1px 5px #333;
+-webkit-box-shadow: 0 1px 5px #333;
+box-shadow: 0 1px 5px #333;
+}
+#container {
+max-width: 1000px;
+margin: 0 auto;
+clear: both;
+}
+#search {
+width: 600px;
+margin: 170px auto 0 auto;
+}
+#left {
+background: #ddd;
+width: 46%;
+float: left;
+margin-top: 50px;
+padding: 10px;
+}
+#right {
+background: #ddd;
+width: 46%;
+float: right;
+margin-top: 50px;
+padding: 10px;
+}
+#single {
+max-width: 850px;
+margin: 50px auto 0 auto;
+}
+#footer {
+clear: both;
+height: 90px;
+padding: 0 0 0 20px;
+}
+div.heading {
+font: 24px/28px 'GillSans', sans-serif;
+color: #FFF;
+padding: 15px 0 0 20px;
+}
+div.post {
+background: #eee;
+padding: 5px;
+margin: 10px 0 0 0;
+}
+div.tags {
+margin: 60px 0 50px 0;
+}
+a:link, a:visited, a:active {
+border: none;
+text-decoration: none;
+color: #505050;
+}
+a:hover {
+color: #777;
+}
+h1 {
+font: 48px/50px 'GillSans', sans-serif;
+color: #444;
+text-align: left;
+padding: 0;
+margin: 0;
+border: none;
+}
+h2 {
+font: 32px/36px 'GillSans', sans-serif;
+color: #444;
+text-align: left;
+padding: 0 0 10px 0;
+margin: 0;
+border: none;
+}
+form input {
+font-size: 14px/17px;
+color: #444;
+width: 200px;
+padding: 5px;
+height: 20px;
+}
+input.search {
+font: 22px/24px 'GillSans', sans-serif;
+color: #505050;
+border: none;
+padding: 10px;
+width: 485px;
+margin: 0;
+-moz-border-radius: 8px;
+-webkit-border-radius: 8px;
+-khtml-border-radius: 8px;
+border-radius: 8px;
+-moz-box-shadow: 1px 1px 5px #555;
+-webkit-box-shadow: 1px 1px 5px #555;
+box-shadow: 1px 1px 5px #555;
+float: left;
+}
+input.wider {
+width: 85%;
+}
+input:focus, textarea:focus, form:focus, select:focus {
+border-color: #FFF;
+}
+.glass {
+color: #555;
+font-size: 2px;
+width: 50px;
+height: 50px;
+margin: 0 28px 0 0;
+padding: 55px 0 0 0;
+border: 0;
+background: transparent url(../images/magnifier.png) no-repeat center top;
+overflow: hidden;
+cursor: pointer;
+cursor: hand;
+float: right;
+}
+table {
+font-size: 18px;
+width: 90%;
+padding: 5px;
+margin: 15px auto;
+}
+ul.search-tags {
+list-style: none;
+display: inline;
+}
+.search-tags li, .search-tags a {
+float: left;
+}
+.search-tags a {
+background: #555;
+color: #FFF;
+padding: 3px 5px;
+margin: 2px 5px 0 2px;
+border-radius: 5px;
+}
+.search-tags a:hover {
+background: #777;
+}
