@@ -1,42 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <title>Bootstrap</title>
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
+  <title>Search</title>
+    <link href="css/style.css" rel="stylesheet">
   </head>
   <body>
   
-  <div class="navbar navbar-inverse">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="brand" href="#">Tech Startup</a>
-		</div>
+  <div id="header"><div class ="heading">Tech Startup</div></div>
+  
+  <div id="container">
+  <div id="single">
+  <h2>What do you need help with?</h2>
+  <form action="searchstyled.php" method="post">
+		<input class="wider" type="text" name="term" placeholder="Search for subjects" value="" />
+		<button class="glass" type="submit">Search</button>
+		</form>
+	
+	<div class="tags">
+	<ul class="search-tags">
+	<li><a href="#">programming</a></li>
+	<li><a href="#">ruby</a></li>
+	<li><a href="#">15-110</a></li>
+	</ul>
 	</div>
+	
+	<h2>Here are some people who can help you:</h2>
+	
+	<div class="post">
+  <b>programmer@andrew.cmu.edu</b><br />
+  I can help with all CS programming courses up to 15-410.
   </div>
   
-  <div class="container">
-    <div class="row">
-	<div class="span12">
-	<h1>I need help with:</h1>
-	<form class="form-inline fprm-search" action="/search">
-          <input class="span10" class="class-search" id="class_search" name="q" type="text" placeholder="Search for subjects..." autocomplete="off" value="" />
-          <button class="btn btn-inverse" id="class_submit" type="submit"><i class="icon-search icon-white"></i></button>
-        </form>
-	
-	</div>
-	</div>
-	
-	<div class="row">
-	<div class="span12">
-	<h2>People who have the knowledge required to help you:</h2>
-	<strong>mellon@cmu.edu</strong>
-	<p>I can help with all programming courses up to 15-410.</p>
-	</div>
-	</div>
+  <div class="post">
+  <b>assist@andrew.cmu.edu</b><br />
+  I am a TA for 15-110 and 15-112.
   </div>
-
-    <script src="http://code.jquery.com/jquery-latest.js"></script>
-    <script src="js/bootstrap.js"></script>
+  
+  </div>
+  </div>
+  
   </body>
 </html>
