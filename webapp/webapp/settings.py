@@ -40,7 +40,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
@@ -73,6 +73,7 @@ STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates/css/'),
     os.path.join(PROJECT_ROOT, 'templates/js/'),
     os.path.join(PROJECT_ROOT, 'templates/img/'),
+    os.path.join(PROJECT_ROOT, 'templates/fonts/'),
 )
 
 # List of finder classes that know how to find static files in
@@ -125,6 +126,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.db.backends.sqlite3',
+    'webapp',
     'gunicorn', 
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',

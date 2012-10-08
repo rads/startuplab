@@ -7,8 +7,18 @@ import webapp.views as views
 # admin.autodiscover()
 
 urlpatterns = patterns('',
-    (r'^signup/$', views.signup),
+    (r'^$', views.index),
+    (r'^/$', views.index),
+    (r'^index/$', views.index),
 
+    (r'^signup/$', views.signup),
+    (r'^signin/$', views.signin),
+    (r'^signout/$', views.signout),
+
+    (r'^feed/$', views.feed),
+    (r'^post/$', views.post),
+    
+    
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 

@@ -1,9 +1,9 @@
 @font-face {
     font-family: 'GillSans';
-    src: url('../fonts/gillsansmtpro-book.eot');
-    src: url('../fonts/gillsansmtpro-book.eot?#iefix') format('embedded-opentype'),
-         url('../fonts/gillsansmtpro-book.woff') format('woff'),
-         url('../fonts/gillsansmtpro-book.ttf') format('truetype');
+    src: url('/static/gillsansmtpro-book.eot');
+    src: url('/static/gillsansmtpro-book.eot?#iefix') format('embedded-opentype'),
+         url('/static/gillsansmtpro-book.woff') format('woff'),
+         url('/static/gillsansmtpro-book.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 

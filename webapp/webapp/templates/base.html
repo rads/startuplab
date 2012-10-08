@@ -2,19 +2,26 @@
 <html>
   <head>
   <title>{% block title %} THE TITLE {% endblock %}</title>
-    <link href="/static/css/style.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
   </head>
+
   <body>
   
   <div id="header">
     <div class ="heading">startup name</div>
+    <div>
+        {% if user.is_authenticated %}
+            Signed in as: {{ user.username }}
+            <a href="/signout">Sign out</a>
+        {% else %}
+            <a href="/signin">Sign in</a>
+        {% endif %}
+    </div>
   </div>
   
   <div id="container">
-  <div id="single">
     {% block content %}
     {% endblock %} 
-  </div>
   </div>
   
   </body>

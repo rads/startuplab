@@ -1,4 +1,11 @@
+import models
 from django import forms
+
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = models.Post
+        fields = ('amount', 'tags', 'endtime')
 
 class SignUpForm(forms.Form):
     email = forms.EmailField(required=True, label='Email')
@@ -19,4 +26,5 @@ class SignUpForm(forms.Form):
         if self.cleaned_data['pass1'] != self.cleaned_data['pass2']:
             raise forms.ValidationError("Your passwords did not match")
         return self.cleaned_data['pass2']
+
 
