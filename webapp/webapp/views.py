@@ -9,6 +9,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
+
 def render_to(template, mimetype=None):
     """ Use this decorator to render the returned dictionary from a function
         to a template in the proper context. If return value is not a dictionary,
@@ -43,13 +44,13 @@ def signup(request):
             return HttpResponse("User %s registered" % data['username'])
     
     elif request.method == 'GET':
-        form = SignUpForm()
+        form = forms.SignUpForm()
     
     return {'form': form}
 
 @render_to('signin.html')
 def signin(request):
-    if request.user.is_authenticated(): # already logged in
+    if request.user.is_authenticated(): 
         return redirect(index)
 
     if request.method == 'POST':
@@ -77,9 +78,6 @@ def feed(request):
 
 @render_to('post.html')
 def post(request):
-    if request.method == 'POST'
     return { 'form' : forms.PostForm() } 
-
-
 
 

@@ -1,6 +1,6 @@
 import dj_database_url, os
 import logging
-# Django settings for webapp project.
+
 
 DEBUG = os.environ.get('ISDEVENV', True)
 TEMPLATE_DEBUG = DEBUG
