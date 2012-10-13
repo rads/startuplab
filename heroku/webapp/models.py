@@ -15,6 +15,12 @@ class Bid(models.Model):
     expiretime = models.DateTimeField() # By when does the user need this request filled?
     posttime = models.DateTimeField(auto_now_add=True)
 
+class Transaction(models.Model):
+    """ Records a transaction between two users """
+#    buyer = models.ForeignKey(User)
+ #   seller = models.ForeignKey(User)
+    amount = models.IntegerField()
+    time = models.DateTimeField(auto_now_add=True) # defaults to datetime row is created
 
 class BidInteraction(models.Model):
     parentBid = models.ForeignKey(Bid)
@@ -43,9 +49,3 @@ class UserProfile(models.Model):
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
-class Transaction(models.Model):
-    """ Records a transaction between two users """
-    buyer = models.ForeignKey(User)
-    seller = models.ForeignKey(User)
-    amount = models.IntegerField()
-    time = models.DateTimeField(auto_now_add=True) # defaults to datetime row is created
