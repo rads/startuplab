@@ -2,11 +2,11 @@ import dj_database_url, os
 import logging
 
 
-DEBUG = os.environ.get('ISDEVENV', True)
+DEBUG = os.environ.get('ISDEVENV', False)
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Nikolai Mushegian', 'nikolai.mushegian@gmail.com')
+    ('Nikolai Mushegian', 'nikolai.mushegian+logging@gmail.com')
 )
 
 MANAGERS = ADMINS
@@ -68,6 +68,8 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles/')
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/signin/'
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates/css/'),
@@ -128,10 +130,8 @@ INSTALLED_APPS = (
     'django.db.backends.sqlite3',
     'webapp',
     'gunicorn', 
-    # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
 )
 
 AUTH_PROFILE_MODULE = "UserProfile"

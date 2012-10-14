@@ -17,16 +17,20 @@ class Bid(models.Model):
 
 class Transaction(models.Model):
     """ Records a transaction between two users """
-#    buyer = models.ForeignKey(User)
- #   seller = models.ForeignKey(User)
+    # related_name is what this field is called in the reverse relation django
+    # automatically makes from User back to Transaction
+    buyer = models.ForeignKey(User, related_name='transaction_buyer')
+    seller = models.ForeignKey(User, related_name='transaction_seller')
+    
     amount = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True) # defaults to datetime row is created
 
 class BidInteraction(models.Model):
+    """ A bid interaction represents an offer for a particular bid and all related info. """
     parentBid = models.ForeignKey(Bid)
     offerAmount = models.IntegerField()
     owner = models.ForeignKey(User)
-    accepted = 0 # boolean
+    accepted = models.BooleanField(default=False)
 
     # Null if interaction is not finished yet
     #TODO make nullable

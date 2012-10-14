@@ -2,10 +2,10 @@ import models
 from django import forms
 
 
-class PostForm(forms.ModelForm):
+class BidForm(forms.ModelForm):
     class Meta:
-        model = models.Post
-        fields = ('amount', 'tags', 'endtime')
+        model = models.Bid
+        fields = ('initialOffer', 'tags', 'expiretime')
 
 class SignUpForm(forms.Form):
     email = forms.EmailField(required=True, label='Email')
