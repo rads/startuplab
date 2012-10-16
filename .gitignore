@@ -1,5 +1,6 @@
-*.pyc 
+*.pyc
 heroku/DEVDB
-/.metadata
-
-
+.metadata
+heroku/.project
+heroku/.pydevproject
+heroku/.settings/org.eclipse.core.resources.prefs
