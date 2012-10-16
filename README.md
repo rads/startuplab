@@ -5,7 +5,7 @@ startuplab
 * "asks" are more like the combination of "times I'm available" and "problem types I can help with"
 * whether a "bid" or an "ask" are for the same item can be determined by whether or not they share tags. Tags can be classes (15-251), subjects (low-level math), or w/e
 
-User Characatures
+User Charicatures
 
 1) Billy
 2) James
@@ -15,7 +15,7 @@ all:
 ** Register flow
 index -> signup -> (email validation) -> "thanks!" flash
 
-1:
+
 ** make bid flow (billy / james)
 search ask page -> examine some asks -> go to "make new bid"
 
@@ -24,7 +24,5 @@ search ask page -> find good ask -> send message -> recieve confirmation -> (IRL
 
 
 
-
-3: 
 ** Set availabilitites/specialties
 

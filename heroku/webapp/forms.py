@@ -11,6 +11,7 @@ class SignUpForm(forms.Form):
     email = forms.EmailField(required=True, label='Email')
     def clean_email(self):
         email = self.cleaned_data['email']
+        #TODO talk about this
         if email[-7:] != 'cmu.edu': #TODO
             raise forms.ValidationError("You must use a CMU email")
         return email

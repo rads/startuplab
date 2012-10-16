@@ -30,7 +30,7 @@ def render_to(template, mimetype=None):
     return renderer
 
 @render_to('index.html')
-def index(request):
+def index(request, *args):
     return {}
 
 @render_to('signup.html')
@@ -103,18 +103,35 @@ def feed(request):
 @render_to('post.html')
 def newbid(request):      # TODO in progress, don't touch
     if request.method == 'GET':
-        return { 'form' : forms.BidForm() }
+        return {}
 
     elif request.method == 'POST':
-        # 
-        form = forms.BidForm(request)
-        if not form.is_valid: #TODO THEN DO SOMETHING ABOUT IT MAN 
-            pass
-        bid = form.save(commit=False) # don't save to DB quite yet...
-
-        # add in fields that are not required in form but required in DB
-        bid.owner = user
+        
+        initialOffer = request.POST.get('initialOffer', '')
+        if (False):
+            # TODO validation bullshit
+            return { errors: 'validation fail' }
+        
+        bid = models.Bid()
+        bid.owner = request.user
+        bid.initialOffer = request.POST.get('initaialOffer', 0)
+        bid.expiretime = request.POST.get('expiretime', datetime.now())
         bid.posttime = datetime.now()
+        bid.description = request.POST.get('description', '')
+       
+        raw_tags = request.POST.get('tags', '')
+        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
+        print tags 
+        # bid.tags = some shit with tags
+        # TODO(andrey)  figure out how to get an array of tag names into 
+        # the bid ManyToMany field properly (look at Tag and Bid models)
+        
+        
+        bid.save()
+
+
+        return HttpResponse("good job") 
+
 
 def querybids(request):
     """ Use this to do AJAX calls to update filter settings """
@@ -124,8 +141,8 @@ def querybids(request):
         tags = ['yeah', 'bitch']
         pricerange = (0, 100)
     else:
-        tags = request.GET['tags']
-        pricerange = (request.GET['minprice'], request.GET['maxprice']) 
+        tags = request.GET.get('tags', '');
+        pricerange = (request.GET.get('minprice', 0), request.GET.get('maxprice', 100000)) 
     ##
 
     resultset = models.Bid.objects.filter(
@@ -133,6 +150,7 @@ def querybids(request):
         Q(initialOffer__gte=pricerange[0]) & Q(initialOffer__lte=pricerange[1]),
     )
 
+    
     return HttpResponse(resultset)
     
 

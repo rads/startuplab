@@ -1,9 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="post">
+<form action="" method="post" onsubmit="validate_bid()">
     {% csrf_token %}
-    {{ form.as_p }}
+
+    <br/> Title:
+    <input type="text" name="title">
+
+    <br/> Description:
+    <input type="textarea" name="description">
+
+    <br/> initial offer
+    <input type="text" name="initialOffer">
+
+    <br/> tags
+    <input type="textarea" name="tags">
+
+    <br/> expire time 
+    <input type="text" name="expiretime">
+    
+    <br/>
+    <label id="errors"></label> 
+    
+    <br/>
     <input type="submit" value="Make Post">
 </form>
+
+<script type="text/javascript">
+    // setup
+    $(function () {
+        
+    });
+
+    
+    //TODO move this into templates/js/validate_bid.js   and then link it
+    function onsubmit() {
+        $('#errors').val(''); 
+        
+
+
+        return true;   
+    }
+</script>
+
 {% endblock %}

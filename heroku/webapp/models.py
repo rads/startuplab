@@ -9,7 +9,7 @@ class Tag(models.Model):
 class Bid(models.Model):
     owner = models.ForeignKey(User)
     title = models.CharField(max_length=100)
-    text = models.CharField(max_length=1000)
+    description = models.CharField(max_length=1000)
     initialOffer = models.IntegerField()
     tags = models.ManyToManyField(Tag)
     expiretime = models.DateTimeField() # By when does the user need this request filled?
