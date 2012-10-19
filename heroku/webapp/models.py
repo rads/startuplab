@@ -44,9 +44,15 @@ class InteractionMessage(models.Model):
 
 # additional info about users that is not part of django's auth model
 class UserProfile(models.Model):
+    """ ALL FIELDS MUST HAVE DEFAULT VALUES
+        The model for a user's profile is instantiated the first time it is 
+        accessed. It will fail if it does not know what to initialize the row with. """
     user = models.ForeignKey(User, unique=True)
-    rating = models.DecimalField(max_digits=15, decimal_places=2)
-    credits = models.IntegerField()
+    
+class UXSettings(models.Model):
+    """ Configurations for things like notifications and site preferences """
+    pass
+
 
 # Attach a handle to the user's profile to the user object. Creates one
 # if it does not exist yet.

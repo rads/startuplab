@@ -153,5 +153,29 @@ def querybids(request):
     
     return HttpResponse(resultset)
     
+@login_required
+@render_to('profile.html')
+def profile(request, username=''):
+    """ Show a user's profile. If the profile is the profile of whoever is logged
+        in, allow the user to POST and edit fields. """
+    
+    session_user = request.user                         # the user that is logged in
+    profile_user = User.objects.get(username=username)  # the user whose profile we're looking at
+
+    # Note: The view passes the whole profile to the template engine, which contains
+    # stuff that may not need to be visible to people who are not viewing their own 
+    # profile. This means it is up to the template code to not expose anything sensitive
+    # for now.
+    profile = profile_user.profile
+    own_profile = (session_user == profile_user)
 
 
+    
+    return { 'profile': profile, 'own_profile': own_profile }
+    
+    
+    
+     
+
+
+    pass

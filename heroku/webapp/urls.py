@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     (r'^/$', views.index),
     (r'^index/$', views.index),
 
+    (r'^user/(?P<username>.*)$', views.profile),
     (r'^signup/$', views.signup),
     (r'^signin/$', views.signin),
     (r'^signout/$', views.signout),
@@ -16,6 +17,7 @@ urlpatterns = patterns('',
     (r'^feed/$', views.feed),
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
+
 )
 
 # Admin
