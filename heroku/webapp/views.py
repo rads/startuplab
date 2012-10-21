@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Helper functions
 def JsonResponse(obj):
-    return HttpResponse(serializers.serialize('json', obj), mimetype="application/json")
+    return HttpResponse(json.dumps(obj), mimetype="application/json")
 
 def render_to(template, mimetype=None):
     """ Use this decorator to render the returned dictionary from a function
@@ -150,12 +150,23 @@ def newbid(request):      # TODO in progress, don't touch
 def querybids(request):
     """ Use this to do AJAX calls to update filter settings """
     data = models.Bid.objects.all()
-    return JsonResponse(data)
+
+    # TODO replace this with a better serialization solution
+    def simplify(bid):
+        ret = {}
+        ret['pk'] = bid.pk
+        ret['title'] = bid.title
+        ret['description'] = bid.description
+        ret['expiretime'] = str(bid.expiretime)
+        return ret
+
+    return JsonResponse(map(simplify, data))
 
 @csrf_exempt
 def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
-    return map(lambda x: x.name, models.Tag.objects.all())
+    print (map(lambda x: x.name, list(models.Tag.objects.all())))
+    return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
 @login_required
 @render_to('profile.html')

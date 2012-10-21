@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 class Tag(models.Model):
     name = models.CharField(max_length=30, primary_key=True)
 
+
 # Requests for help.
 class Bid(models.Model):
     owner = models.ForeignKey(User)
