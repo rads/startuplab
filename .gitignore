@@ -5,3 +5,5 @@ heroku/DEVDB
 heroku/.project
 heroku/.pydevproject
 heroku/.settings/org.eclipse.core.resources.prefs
+heroku/build
+heroku/pip

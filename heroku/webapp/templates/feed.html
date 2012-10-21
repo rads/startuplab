@@ -2,38 +2,113 @@
 
 {% block content %}
 
-  <div id="left">
-  <h2>People You Can Help</h2>
- 
-  <div class="post">
-  <b>name@andrew.cmu.edu</b><br />
-  I need help with 15-251!
-  </div>
-  
-  <div class="post">
-  <b>id@andrew.cmu.edu</b><br />
-  I need help with my global history paper.
-  </div>
-  
-  <div class="post">
-  <b>yinzer@andrew.cmu.edu</b><br />
-  I need help studying for 15-110.
-  </div>
-  
-  </div>
-  
-  <div id="right">
-  <h2>People Who Can Help You</h2>
-  
-  <div class="post">
-  <b>help@andrew.cmu.edu</b><br />
-  I can help with 76-101!
-  </div>
-  
-  <div class="post">
-  <b>assist@andrew.cmu.edu</b><br />
-  I can help with with all levels of calculus.
-  </div>
-  </div>
+<div id="search_container">
+    <!-- terms/tags (arguments to query call)-->
+    <input type="text" id="querystring"> </input> 
+    <button id="search">search</button>
+    <!-- filter/sort (client-side logic) -->
+    
+</div>
+
+<div id="feed_container">
+
+</div>
+
+
+<script type="text/template" id="bid_template">
+    post time: <%= posttime %>
+</script>
+
+
+<script type="text/javascript">
+    // TODO move to feed.js
+
+    var BidModel = Backbone.Model.extend({
+        
+    });
+
+    var BidResults = Backbone.Collection.extend({
+        model: BidModel         
+    });
+
+    var BidView = Backbone.View.extend({
+        model: BidModel,
+        initialize: function () {
+            this.render();
+        },
+        render: function () {
+            var vars = { posttime: this.model.get('posttime')};
+            var template = _.template($('#bid_template').html(), vars);
+            this.$el.html(template) 
+        },
+
+    });
+
+    var BidResultsView = Backbone.View.extend({
+
+        initialize: function () {
+            var self = this;
+            this.bidviews = [];
+            _(this).bindAll('add');
+            this.collection.bind('add', this.add);
+        },
+
+        render: function() {
+            $(this.el).empty();
+            var self = this;
+            _(this.bidviews).each(function (bv) { 
+                bv.render();
+                $(self.el).append(bv.el);
+            });
+        },
+
+        add: function (bid) {
+            var bid_el = $('<div id="#' + bid.get('pk') + '"></div>');
+            var bidview = new BidView({
+                model: bid,
+                el: bid_el,
+            });
+            this.bidviews.push(bidview);
+        }
+    });
+   
+    var bidresults = new BidResults([]);
+    var resultsview = new BidResultsView({
+        collection: bidresults,
+        el: $('#feed_container'),
+    });
+   
+
+    function refreshWithQuery() {
+        $.ajax({
+            url: '/querybids',
+            method: 'GET',
+            type: 'json',
+            success: function(django_models) {
+                _(django_models).each(function (djbid) {
+                    var model = new BidModel({
+                        title: djbid.fields.title,
+                        description: djbid.fields.description,
+                        posttime: djbid.fields.posttime,
+                        pk: djbid.pk, 
+                        tags: djbid.tags,
+
+                    });
+                    resultsview.add(model);
+                });
+                resultsview.render();
+            },
+            error: function () { alert("AJAX FAIL"); }
+        });
+    }
+
+    $(function() {
+        
+        refreshWithQuery();
+    
+    });
+
+
+</script>
 
 {% endblock %}

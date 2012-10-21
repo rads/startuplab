@@ -1,16 +1,24 @@
+#TODO clean up these imports and split up this file
 from datetime import datetime
+import json
 from functools import wraps
 from django.db.models import Q
 from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, get_object_or_404
 from webapp import forms, models
+from django.core import serializers
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
+
+# Helper functions
+def JsonResponse(obj):
+    return HttpResponse(serializers.serialize('json', obj), mimetype="application/json")
 
 def render_to(template, mimetype=None):
     """ Use this decorator to render the returned dictionary from a function
@@ -28,6 +36,9 @@ def render_to(template, mimetype=None):
                                       mimetype=mimetype)
         return wrapper
     return renderer
+
+
+# End helper functions
 
 @render_to('index.html')
 def index(request, *args):
@@ -115,7 +126,10 @@ def newbid(request):      # TODO in progress, don't touch
         bid = models.Bid()
         bid.owner = request.user
         bid.initialOffer = request.POST.get('initaialOffer', 0)
-        bid.expiretime = request.POST.get('expiretime', datetime.now())
+
+        datetime_str = request.POST.get('expiretime')
+        bid.expiretime = datetime.strptime(datetime_str, "%m/%d/%Y") 
+        
         bid.posttime = datetime.now()
         bid.description = request.POST.get('description', '')
        
@@ -132,50 +146,45 @@ def newbid(request):      # TODO in progress, don't touch
 
         return HttpResponse("good job") 
 
-
+@csrf_exempt
 def querybids(request):
     """ Use this to do AJAX calls to update filter settings """
+    data = models.Bid.objects.all()
+    return JsonResponse(data)
 
-    ## Filter options
-    if "debugging":
-        tags = ['yeah', 'bitch']
-        pricerange = (0, 100)
-    else:
-        tags = request.GET.get('tags', '');
-        pricerange = (request.GET.get('minprice', 0), request.GET.get('maxprice', 100000)) 
-    ##
+@csrf_exempt
+def alltags(request):
+    """ Get a list of all the tags. Used to populate auto-suggest field thing. """
+    return map(lambda x: x.name, models.Tag.objects.all())
 
-    resultset = models.Bid.objects.filter(
-        Q(expiretime__gte = datetime.now()),
-        Q(initialOffer__gte=pricerange[0]) & Q(initialOffer__lte=pricerange[1]),
-    )
-
-    
-    return HttpResponse(resultset)
-    
 @login_required
 @render_to('profile.html')
 def profile(request, username=''):
     """ Show a user's profile. If the profile is the profile of whoever is logged
         in, allow the user to POST and edit fields. """
-    
-    session_user = request.user                         # the user that is logged in
-    profile_user = User.objects.get(username=username)  # the user whose profile we're looking at
 
-    # Note: The view passes the whole profile to the template engine, which contains
-    # stuff that may not need to be visible to people who are not viewing their own 
-    # profile. This means it is up to the template code to not expose anything sensitive
-    # for now.
-    profile = profile_user.profile
-    own_profile = (session_user == profile_user)
+    if request.method == 'GET':
+        # the user that is logged in
+        session_user = request.user
+        profile_user = get_object_or_404(User, username=username)
 
+        # Note: The view passes the whole profile to the template engine, which contains
+        # stuff that may not need to be visible to people who are not viewing their own 
+        # profile. This means it is up to the template code to not expose anything sensitive
+        # for now.
+        profile = profile_user.profile
+        own_profile = (session_user == profile_user)
+    
+        return { 'profile': profile, 'own_profile': own_profile }
+    
+    elif request.method == 'POST':
+        # A POST is made to this URL every time any field or combinations of fields
+        # are modified. The client is free to send updates consisting of any combination
+        # of fields. 
+        user = request.user  # authenticated by login_required
+            
+        # Example for how to do all other field updates
+        if request.POST['tags']:
+            # TODO(andrey) adapt whatever you make for new bid to work here
+            pass 
 
-    
-    return { 'profile': profile, 'own_profile': own_profile }
-    
-    
-    
-     
-
-
-    pass

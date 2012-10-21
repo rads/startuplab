@@ -2,9 +2,12 @@
 {% block title %} {% endblock %}
 
 {% block content %}
-
+    This is the profile page of {{ profile.user.username }}. <br/>
+    rep: {{ profile.rep }} <br/> 
+    credits: {{ profile.credits }} <br/>
+    
     {% if own_profile %}
-        self
+        this should be visible iff this is the logged in user's profile <br/>
     {% endif %}
 
 {% endblock %}

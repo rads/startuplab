@@ -17,7 +17,7 @@
     <input type="textarea" name="tags">
 
     <br/> expire time 
-    <input type="text" name="expiretime">
+    <input type="text" id="expiretime" name="expiretime">
     
     <br/>
     <label id="errors"></label> 
@@ -29,13 +29,14 @@
 <script type="text/javascript">
     // setup
     $(function () {
-        
+        $('#expiretime').datepicker();
     });
 
     
     //TODO move this into templates/js/validate_bid.js   and then link it
-    function onsubmit() {
+    function validate_bid() {
         $('#errors').val(''); 
+        
         
 
 
