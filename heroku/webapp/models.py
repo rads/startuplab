@@ -4,7 +4,9 @@ from django.contrib.auth.models import User
 
 class Tag(models.Model):
     name = models.CharField(max_length=30, primary_key=True)
-
+    
+    def __unicode__(self):
+        return self.name
 
 # Requests for help.
 class Bid(models.Model):
@@ -15,6 +17,9 @@ class Bid(models.Model):
     tags = models.ManyToManyField(Tag)
     expiretime = models.DateTimeField() # By when does the user need this request filled?
     posttime = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.owner) + ': "' + self.title + '"';
 
 class Transaction(models.Model):
     """ Records a transaction between two users """
@@ -32,10 +37,12 @@ class BidInteraction(models.Model):
     offerAmount = models.IntegerField()
     owner = models.ForeignKey(User)
     accepted = models.BooleanField(default=False)
+    
+    transaction = models.ForeignKey(Transaction, null=True)
 
-    # Null if interaction is not finished yet
-    #TODO make nullable
-    transaction = models.ForeignKey(Transaction)
+    def __unicode__(self):
+        return str(self.owner) + " responding to bid [" + str(self.bid) + "]";
+    
 
 class InteractionMessage(models.Model):
     interaction = models.ForeignKey(BidInteraction) 

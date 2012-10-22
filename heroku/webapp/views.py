@@ -117,11 +117,14 @@ def newbid(request):      # TODO in progress, don't touch
         return {}
 
     elif request.method == 'POST':
+    
         
-        initialOffer = request.POST.get('initialOffer', '')
-        if (False):
-            # TODO validation bullshit
-            return { errors: 'validation fail' }
+        
+        initialOffer = request.POST.get('initialOffer', 0)
+    
+        raw_tags = request.POST.get('tags', '')
+        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
+        print tags
         
         bid = models.Bid()
         bid.owner = request.user
@@ -133,10 +136,7 @@ def newbid(request):      # TODO in progress, don't touch
         bid.posttime = datetime.now()
         bid.description = request.POST.get('description', '')
        
-        raw_tags = request.POST.get('tags', '')
-        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
-        print tags 
-        # bid.tags = some shit with tags
+       # bid.tags = some shit with tags
         # TODO(andrey)  figure out how to get an array of tag names into 
         # the bid ManyToMany field properly (look at Tag and Bid models)
         
@@ -165,7 +165,6 @@ def querybids(request):
 @csrf_exempt
 def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
-    print (map(lambda x: x.name, list(models.Tag.objects.all())))
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
 @login_required

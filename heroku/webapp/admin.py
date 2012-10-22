@@ -1,5 +1,12 @@
 from webapp import models
 from django.contrib import admin
 
-admin.site.register(models.Tag)
-admin.site.register(models.Bid)
+registered = [
+    models.Tag, 
+    models.Bid, 
+    models.Transaction, 
+    models.BidInteraction
+]
+
+for model in registered:
+    admin.site.register(model)

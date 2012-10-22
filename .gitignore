@@ -7,3 +7,4 @@ heroku/.pydevproject
 heroku/.settings/org.eclipse.core.resources.prefs
 heroku/build
 heroku/pip
+heroku/webapp/staticfiles
