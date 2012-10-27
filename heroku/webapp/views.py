@@ -119,7 +119,6 @@ def newbid(request):      # TODO in progress, don't touch
     elif request.method == 'POST':
     
         
-        
         initialOffer = request.POST.get('initialOffer', 0)
     
         raw_tags = request.POST.get('tags', '')
