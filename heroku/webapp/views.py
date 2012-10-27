@@ -126,6 +126,7 @@ def newbid(request):      # TODO in progress, don't touch
         bid = models.Bid()
         bid.owner = request.user
         bid.initialOffer = request.POST.get('initaialOffer', 0)
+        bid.title = request.POST.get('title')
 
         datetime_str = request.POST.get('expiretime')
         bid.expiretime = datetime.strptime(datetime_str, "%m/%d/%Y") 
@@ -134,29 +135,64 @@ def newbid(request):      # TODO in progress, don't touch
         bid.description = request.POST.get('description', '')
        
         raw_tags = request.POST.get('tags', '')
-        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
-        print tags 
-        # bid.tags = some shit with tags
-        # TODO(andrey)  figure out how to get an array of tag names into 
-        # the bid ManyToMany field properly (look at Tag and Bid models)
-        
+        tags = map(lambda x: x.strip(' '), raw_tags.split(','))   
+           
+        tagModels = []
+                       
+        for tag in tags:
+            newTag = models.Tag(name = tag)
+            newTag.save()
+            tagModels.append(newTag)
+                
+        bid.tags = tagModels
         
         bid.save()
-
 
         return HttpResponse("good job") 
 
 @csrf_exempt
 def querybids(request):
+    # Filter options
+    if "debugging":
+        tags = ['some', 'tag']
+        pricerange = (0, 100)
+    else:
+        tags = request.GET.get('tags', '');
+        pricerange = (request.GET.get('minprice', 0), request.GET.get('maxprice', 100000))     
+    
+    
+    # Applies the various filters to a query
+    def filtrate(obj):
+        #obj.filter(
+        #    Q(expiretime__gte = datetime.now()),
+        #    Q(initialOffer__gte=pricerange[0]) & Q(initialOffer__lte=pricerange[1]),
+        #)
+        obj.filter(title__contains='bid')
+        return obj
+    
     """ Use this to do AJAX calls to update filter settings """
-    data = models.Bid.objects.all()
+    data = models.Tag.objects.none()
+    
+    #Assumption : all of these tags already exist in the database
+    for tag in tags:
+        #try:
+            newTag = models.Tag.objects.get(name='tag')
+            data = data | (filtrate(newTag.bid_set.all()))
+        #except:
+            # We are assuming that this doesn't happen, since people can only look up
+            # for valid tags.
+            print "whoops"
+       
+
     return JsonResponse(data)
+
 
 @csrf_exempt
 def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return map(lambda x: x.name, models.Tag.objects.all())
 
+    
 @login_required
 @render_to('profile.html')
 def profile(request, username=''):
