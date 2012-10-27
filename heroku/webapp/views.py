@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 # Helper functions
 def JsonResponse(obj):
-    return HttpResponse(serializers.serialize('json', obj), mimetype="application/json")
+    return HttpResponse(json.dumps(obj), mimetype="application/json")
 
 def render_to(template, mimetype=None):
     """ Use this decorator to render the returned dictionary from a function
@@ -117,11 +117,14 @@ def newbid(request):      # TODO in progress, don't touch
         return {}
 
     elif request.method == 'POST':
+    
         
-        initialOffer = request.POST.get('initialOffer', '')
-        if (False):
-            # TODO validation bullshit
-            return { errors: 'validation fail' }
+        
+        initialOffer = request.POST.get('initialOffer', 0)
+    
+        raw_tags = request.POST.get('tags', '')
+        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
+        print tags
         
         bid = models.Bid()
         bid.owner = request.user
@@ -182,15 +185,24 @@ def querybids(request):
             # We are assuming that this doesn't happen, since people can only look up
             # for valid tags.
             print "whoops"
-       
 
-    return JsonResponse(data)
+    # TODO replace this with a better serialization solution
+    # Nikolai, is this where you apply various filters to the set of bids?
+    # I thought we were doing this in a way that it would be done before the query?
+    def simplify(bid):
+        ret = {}
+        ret['pk'] = bid.pk
+        ret['title'] = bid.title
+        ret['description'] = bid.description
+        ret['expiretime'] = str(bid.expiretime)
+        return ret
 
+    return JsonResponse(map(simplify, data))
 
 @csrf_exempt
 def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
-    return map(lambda x: x.name, models.Tag.objects.all())
+    return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
     
 @login_required

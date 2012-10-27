@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     (r'^feed/$', views.feed),
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
+    (r'^alltags/$', views.alltags),
 
 )
 
