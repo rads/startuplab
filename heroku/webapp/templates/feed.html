@@ -3,12 +3,13 @@
 {% block content %}
 
 <div id="search_container">
-    <!-- terms/tags (arguments to query call)-->
-    <input type="text" id="querystring"> </input> 
-    <button id="search">search</button>
-    <!-- filter/sort (client-side logic) -->
-    
+    search text: <input type="text" id="searchtext"> </input> <br />
+    tags: <input type="text" id="searchtags"> </input> <br />
+    <button id="search">search</button> <br />
+    more filters will go here 
 </div>
+<br/><br/>
+
 
 <div id="feed_container">
 
@@ -16,7 +17,10 @@
 
 
 <script type="text/template" id="bid_template">
-    post time: <%= posttime %>
+    title: <%= title %> <br/ >
+    expire time: <%= expiretime %> <br />
+    tags: <%= tags %> <br />
+    <br />
 </script>
 
 

@@ -179,11 +179,11 @@ def querybids(request):
     
     # for now this is a sane default. Eventually server should set a hard 
     # max on how many it gets from the DB
-    if request.GET.get('tags') is None:
+    if request.GET.getlist('tags[]') == []:
         return JsonResponse(map(simplify, list(models.Bid.objects.all())))
 
-    # tags should be separated by "+"s
-    tags = map(lambda x: x.strip(' '), request.GET.get('tags').split('+'))
+    tags = request.GET.getlist('tags[]')
+    print tags
     
     # initialize to empty resultset so that we can use union operator 
     data = models.Tag.objects.none()

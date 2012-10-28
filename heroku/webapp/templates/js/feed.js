@@ -12,11 +12,14 @@ var BidView = Backbone.View.extend({
         this.render();
     },
     render: function () {
-        var vars = { posttime: this.model.get('posttime')};
+        var vars = { 
+            tags: this.model.get('tags'),
+            expiretime: this.model.get('expiretime'),
+            title: this.model.get('title'),
+        };
         var template = _.template($('#bid_template').html(), vars);
         this.$el.html(template) 
     },
-
 });
 
 var BidResultsView = Backbone.View.extend({
@@ -38,14 +41,17 @@ var BidResultsView = Backbone.View.extend({
     },
 
     add: function (bid) {
-        var bid_el = $('<div id="#' + bid.get('pk') + '"></div>');
+        var bid_el = $('<div id="' + bid.get('pk') + '"></div>');
         var bidview = new BidView({
             model: bid,
             el: bid_el,
         });
         this.bidviews.push(bidview);
-    }
+    },
+    
 });
+
+
 
 var bidresults = new BidResults([]);
 var resultsview = new BidResultsView({
@@ -54,17 +60,23 @@ var resultsview = new BidResultsView({
 });
 
 
-function refreshWithQuery() {
+function refreshWithQuery(args) {
+    //TODO(nikolai) figure out how to remove things from backbone views properly
+    bidresults = new BidResults([]);
+    resultsview.bidviews = [];
+    $('#feed_container').html('');
+
     $.ajax({
         url: '/querybids',
         method: 'GET',
-        type: 'json',
+        data: args,
         success: function(django_models) {
             _(django_models).each(function (djbid) {
                 var model = new BidModel({
-                    title: djbid.fields.title,
-                    description: djbid.fields.description,
-                    posttime: djbid.fields.posttime,
+                    title: djbid.title,
+                    description: djbid.description,
+                    // TODO add post time to bid everywhere    posttime: djbid.posttime,
+                    expiretime: djbid.expiretime,
                     pk: djbid.pk, 
                     tags: djbid.tags,
 
@@ -77,10 +89,36 @@ function refreshWithQuery() {
     });
 }
 
-$(function() {
-    
-    refreshWithQuery();
+/// CAUTION: CODE RE-USE
+//TODO refactor
+function set_up_select(tags) {
+    $('#searchtags').select2({
+        minimumInputLength: 0,
+        tokenSeparators: [',', ';'],
+        tags: _(tags).map(function(tag) {return{'id': tag, 'text': tag};}),
+        width: '200px',
+    });
+}
 
+$(function() {
+    $.ajax({
+        url: '/alltags',
+        success: set_up_select,
+        type: 'json',
+
+    });
+    refreshWithQuery();
+    $('button#search').click(function(event) {
+        if ($('#searchtags').val() == '') {
+            refreshWithQuery();
+        } else {
+            var tags = $('#searchtags').val().split(',');
+            refreshWithQuery({
+                tags: tags
+            });
+        }
+    });
+    
 });
 
 
