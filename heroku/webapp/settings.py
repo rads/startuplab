@@ -16,6 +16,7 @@ DATABASES = {
     'default': dj_database_url.config(default='postgres://localhost')
 }
 
+# overrides with sqlite if it's local
 if (os.environ.get('ISDEVENV', True)):
     logger = logging.getLogger(__name__)
     logger.info("Using DEVDB (sqlite)")
