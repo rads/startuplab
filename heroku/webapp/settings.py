@@ -1,8 +1,9 @@
 import dj_database_url, os
 import logging
 
-
-DEBUG = os.environ.get('ISDEVENV', False)
+# Don't share the url until we can commit to always having debug off in production
+# major TODO figure out how to serve static files correctly in production
+DEBUG = True #os.environ.get('ISDEVENV', False)
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -17,7 +18,7 @@ DATABASES = {
 }
 
 # overrides with sqlite if it's local
-if (os.environ.get('ISDEVENV', True)):
+if (DEBUG):
     logger = logging.getLogger(__name__)
     logger.info("Using DEVDB (sqlite)")
     DATABASES['default'] = {
