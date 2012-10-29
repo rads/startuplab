@@ -233,9 +233,28 @@ def profile(request, username=''):
         # are modified. The client is free to send updates consisting of any combination
         # of fields. 
         user = request.user  # authenticated by login_required
-            
+        # This is the session user. A post to this page will modify the info of the
+        # user in the browser's session. They won't be able to do this for any profile
+        # but their own through the interface.
+
+
+        ### Go through each field and update as necessary, but do not save the profile
+        ### object to the db until all fields are updated
+
         # Example for how to do all other field updates
-        if request.POST['tags']:
-            # TODO(andrey) adapt whatever you make for new bid to work here
-            pass 
+        if request.POST.getlist('tags[]'):
+            tag_names = request.POST.getlist('tags[]')
+            #TODO(andrey)  I want to save this list of tags to UserProfile just like
+            # we already do for Bid.tags elsewhere. I think it's a good idea to let them
+            # create new tags from their profile too, so we need to have basically the
+            # exact same functionality in both places. 
+            # Maybe something like
+            ## tags = tags_from_names(tag_names)   <---- creates new tags if they don't exist
+            ## userprofile.tags = tags
+            ## userprofile.save()
+
+        # non-array example
+        if request.POST.get('some_shit'):
+            pass # etc, etc
+
 
