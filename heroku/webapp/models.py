@@ -50,15 +50,12 @@ class InteractionMessage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User)
  
-class UXSettings(models.Model):
-    """ Configurations for things like notifications and site preferences """
-    pass
-
 # additional info about users that is not part of django's auth model
 class UserProfile(models.Model):
-    """ ALL FIELDS MUST HAVE DEFAULT VALUES
+    """ 
         The model for a user's profile is instantiated the first time it is 
-        accessed. It will fail if it does not know what to initialize the row with. """
+        accessed. It will fail if it does not know what to initialize the row with. 
+    """
     user = models.ForeignKey(User, unique=True)
     rep = models.IntegerField(default=0)
     credits = models.IntegerField(default=0)
@@ -67,6 +64,7 @@ class UserProfile(models.Model):
 
 # Attach a handle to the user's profile to the user object. Creates one
 # if it does not exist yet.
+
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
