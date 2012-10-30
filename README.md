@@ -10,5 +10,4 @@ BACKLOG (low priority)
 -------
 andrey: search around for efficient ways to search for strings of text in active bids
 nikolai: figure out static file bullshit on heroku
-
-
+nikolai: cool thing http://tommoor.github.com/crumble/
