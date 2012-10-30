@@ -49,6 +49,10 @@ class InteractionMessage(models.Model):
     text = models.CharField(max_length=10000)
     timestamp = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User)
+ 
+class UXSettings(models.Model):
+    """ Configurations for things like notifications and site preferences """
+    pass
 
 # additional info about users that is not part of django's auth model
 class UserProfile(models.Model):
@@ -59,11 +63,7 @@ class UserProfile(models.Model):
     rep = models.IntegerField(default=0)
     credits = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag) # no default needed
-    
-class UXSettings(models.Model):
-    """ Configurations for things like notifications and site preferences """
-    pass
-
+    settings = models.ForeignKey(UXSettings, unique=True)
 
 # Attach a handle to the user's profile to the user object. Creates one
 # if it does not exist yet.

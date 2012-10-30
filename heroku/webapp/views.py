@@ -212,36 +212,33 @@ def alltags(request):
 @render_to('profile.html')
 def profile(request, username=''):
     """ Show a user's profile. If the profile is the profile of whoever is logged
-        in, allow the user to POST and edit fields. """
+        in, allow the user to POST and edit fields. 
+        Returns full page for GET and JSON {success, error} object for POST"""
+        
+    # the user that is logged in
+    session_user = request.user
+    profile_user = get_object_or_404(User, username=username)
+
+    # Note: The view passes the whole profile to the template engine, which contains
+    # stuff that may not need to be visible to people who are not viewing their own 
+    # profile. This means it is up to the template code to not expose anything sensitive
+    # for now.
+    profile = profile_user.profile
+    is_own_profile = (session_user == profile_user)
+    
 
     if request.method == 'GET':
-        # the user that is logged in
-        session_user = request.user
-        profile_user = get_object_or_404(User, username=username)
-
-        # Note: The view passes the whole profile to the template engine, which contains
-        # stuff that may not need to be visible to people who are not viewing their own 
-        # profile. This means it is up to the template code to not expose anything sensitive
-        # for now.
-        profile = profile_user.profile
-        own_profile = (session_user == profile_user)
-    
-        return { 'profile': profile, 'own_profile': own_profile }
+        return { 'profile': profile, 'is_own_profile': own_profile }
     
     elif request.method == 'POST':
         # A POST is made to this URL every time any field or combinations of fields
         # are modified. The client is free to send updates consisting of any combination
         # of fields. 
-        user = request.user  # authenticated by login_required
-        # This is the session user. A post to this page will modify the info of the
-        # user in the browser's session. They won't be able to do this for any profile
-        # but their own through the interface.
 
 
         ### Go through each field and update as necessary, but do not save the profile
         ### object to the db until all fields are updated
 
-        # Example for how to do all other field updates
         if request.POST.getlist('tags[]'):
             tag_names = request.POST.getlist('tags[]')
             #TODO(andrey)  I want to save this list of tags to UserProfile just like
@@ -254,7 +251,8 @@ def profile(request, username=''):
             ## userprofile.save()
 
         # non-array example
-        if request.POST.get('some_shit'):
-            pass # etc, etc
+        if request.POST.get('shit'):
+            pass
+            
 
-
+        return JsonResponse()
