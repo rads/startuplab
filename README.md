@@ -18,6 +18,7 @@ andrey: search around for efficient ways to search for strings of text in active
 andrey: figure out logging shit
 nikolai: figure out static file bullshit on heroku
 nikolai: cool thing http://tommoor.github.com/crumble/
+nikolai: configure Postgres locally so we don't have to test the credit lock stuff on heroku
 
 both: think about different cases for when people don't have enough credits for stuff.
 for example, if you respond to a help request, the person making the request should see

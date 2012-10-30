@@ -1,8 +1,8 @@
 import dj_database_url, os
 import logging
 
-
-DEBUG = os.environ.get('ISDEVENV', False)
+# TODO(nikolai) straighten this shit out
+DEBUG = bool(os.environ.get('ISDEVENV', False))
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

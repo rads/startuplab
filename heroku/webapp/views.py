@@ -3,9 +3,10 @@ from datetime import datetime
 import json
 from functools import wraps
 from django.db.models import Q
+from django.db import connection
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect, get_object_or_404
-from webapp import forms, models
+from webapp import forms, models, settings
 from django.core import serializers
 from django.contrib import auth
 from django.contrib.auth import authenticate, login, logout
@@ -228,7 +229,7 @@ def profile(request, username=''):
     
 
     if request.method == 'GET':
-        return { 'profile': profile, 'is_own_profile': own_profile }
+        return { 'profile': profile, 'is_own_profile': is_own_profile }
     
     elif request.method == 'POST':
         # A POST is made to this URL every time any field or combinations of fields
@@ -256,3 +257,76 @@ def profile(request, username=''):
             
 
         return JsonResponse()
+
+### credit transactions
+## If you touch this shit without telling me I will fuck you up
+
+from django.db import transaction
+
+
+def _sql_lock_string(sql):
+    return sql + ' FOR UPDATE' 
+
+def _lock_dat_shit(model_instance, field):
+    """ 
+        Given a model instance and a field name (string), calling this function
+        will lock the row corresponding to the model instance until an UPDATE is
+        called on that row, and then update that field on the model instance with
+        the locked value in the DB. 
+        YOU MUST CALL THIS FUNCTION FROM SOMETHING WRAPPED IN @transaction.commit_on_success
+        WHICH ALSO CALLS model_instance.save() OR ELSE I CAN'T GUARANTEE WTF WILL HAPPEN
+    """
+
+
+    model_type = model_instance.__class__
+    query = model_type.objects.filter(id = model_instance.id).values_list(field)
+    
+    # get the SQL that django would have generated
+    (raw_sql, params) = query._as_sql(connection=connection)
+    sql = ''
+
+    # don't do anything locally because SQLite sucks
+    # TODO(nikolai) set up postgres on dev machine so that we don't have to deploy to test
+    if settings.DEBUG:
+        sql = raw_sql
+    else:
+        sql = _sql_lock_string(raw_sql)
+
+    # LOCK DAT SHIT
+    cursor = connection.cursor()
+    cursor.execute(sql, params)
+    
+    # MAKE SURE NOBODY FUCKS WITH OUR FIELD, YO
+    field_value = cursor.fetchone()[0]
+    setattr(model_instance, field, field_value)
+
+
+@transaction.commit_on_success
+def make_transaction(from_username, to_username, amount):
+    pass
+
+def remove_credit(username, amount):
+    pass
+
+@transaction.commit_on_success
+def add_credit(username, amount):
+    user = User.objects.get(username=username)
+    user_profile = user.profile
+    _lock_dat_shit(user_profile, 'credits')
+    # safety zone start
+    user_profile.credits += amount
+
+    # safety zone end
+    user_profile.save()
+
+
+@csrf_exempt
+def credit_test(request):
+    res = ''
+
+    add_credit(request.GET.get('username'), int(request.GET.get('amount')))
+    res += 'added credits'
+ 
+    return HttpResponse(res)
+
+

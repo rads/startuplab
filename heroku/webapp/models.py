@@ -60,11 +60,9 @@ class UserProfile(models.Model):
     rep = models.IntegerField(default=0)
     credits = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag) # no default needed
-    settings = models.ForeignKey(UXSettings, unique=True)
 
 # Attach a handle to the user's profile to the user object. Creates one
 # if it does not exist yet.
-
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 

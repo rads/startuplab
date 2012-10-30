@@ -1,10 +1,11 @@
 from django.conf.urls import patterns, include, url
 import webapp.views as views
+from webapp.settings import DEBUG
 from django.contrib import admin
 admin.autodiscover()
 
 # Custom Routes
-urlpatterns = patterns('',
+urlpatterns = patterns(
     (r'^$', views.index),
     (r'^/$', views.index),
     (r'^index/$', views.index),
@@ -18,7 +19,7 @@ urlpatterns = patterns('',
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
     (r'^alltags/$', views.alltags),
-
+    (r'^credit/$', views.credit_test),
 )
 
 # Admin
