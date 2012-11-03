@@ -5,7 +5,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 # Custom Routes
-urlpatterns = patterns(
+urlpatterns = patterns('',
     (r'^$', views.index),
     (r'^/$', views.index),
     (r'^index/$', views.index),
