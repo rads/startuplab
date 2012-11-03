@@ -40,10 +40,7 @@ class BidInteraction(models.Model):
     parentBid = models.ForeignKey(Bid)
     offerAmount = models.IntegerField()
     owner = models.ForeignKey(User)
-    accepted = models.BooleanField(default=False)
     
-    transaction = models.ForeignKey(Transaction, null=True)
-
     def __unicode__(self):
         return str(self.owner) + " responding to bid [" + str(self.bid) + "]";
     
@@ -54,7 +51,11 @@ class InteractionMessage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User)
  
-# additional info about users that is not part of django's auth model
+    def __unicode__(self):
+        return str(owner) + " said " + str(text)[:30]
+
+
+# additional info about users that is not part of django's auth system
 class UserProfile(models.Model):
     """ 
         The model for a user's profile is instantiated the first time it is 
@@ -65,7 +66,7 @@ class UserProfile(models.Model):
     credits = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag) # no default needed
 
-# Attach a handle to the user's profile to the user object. Creates one
+# Attach a handle to the user's profile to the user object. Creates a profile
 # if it does not exist yet.
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 

@@ -41,16 +41,15 @@ def render_to(template, mimetype=None):
 # End helper functions
 
 @render_to('index.html')
-def index(request, *args):
+def index(request):
     return {}
 
 @render_to('signup.html')
+#TODO refactor to not use django forms
 def signup(request):
     if request.method == 'POST': 
         form = forms.SignUpForm(request.POST)
         if form.is_valid():
-            # any validation logic that does not touch the DB should be done in
-            # SignUpForm inside forms.py
             data = form.cleaned_data
 
             user = User.objects.create_user(data['username'], data['email'], data['pass1'])
@@ -67,12 +66,15 @@ def signup(request):
     
     return {'form': form}
 
+
+
+
 @render_to('signin.html')
+#TODO refactor to not use django forms
 def signin(request):
 
     if request.user.is_authenticated(): 
         return redirect(index)
-
 
     if request.method == 'POST':
         un = request.POST['username']
@@ -117,8 +119,6 @@ def newbid(request):      # TODO in progress, don't touch
         return {}
 
     elif request.method == 'POST':
-    
-        
         initialOffer = request.POST.get('initialOffer', 0)
     
         raw_tags = request.POST.get('tags', '')
@@ -158,35 +158,39 @@ def newbid(request):      # TODO in progress, don't touch
 @csrf_exempt
 def querybids(request):
     
-    # Applies the various filters to a query
-    def filtrate(obj):
-        obj.filter(title__contains='bid')
-        return obj
-
-    # TODO(nikolai) replace this with a better serialization solution
+        # TODO(nikolai) replace this with a better serialization solution
     def simplify(bid):
         ret = {}
         ret['pk'] = bid.pk
         ret['title'] = bid.title
         ret['description'] = bid.description
         ret['expiretime'] = str(bid.expiretime)
-        # get the list of tag names for tags it has
+        # TODO get the list of tag names for tags it has
         # I tried  map(lambda x: x.name, bid.tags)  but it doesn't work
         # also tried  list(bid.tags)  but it's not a queryset so that doesn't work
         ret['tags'] = ["TODO"]
         return ret
 
-    
+    # Applies the various filters to a query
+    def filtrate(obj):
+        return obj
+
     # for now this is a sane default. Eventually server should set a hard 
     # max on how many it gets from the DB
-    if request.GET.getlist('tags[]') == []:
+    if request.GET.getlist('tags[]') == [] and request.GET.getlist('keywords[]') == []:
         return JsonResponse(map(simplify, list(models.Bid.objects.all())))
 
-    tags = request.GET.getlist('tags[]')
-    print tags
+    tags = []
+    if request.GET.getlist('tags[]'):
+        tags = request.GET.getlist('tags[]')
     
+    keywords = []
+    if request.GET.get('keywords[]'):
+        keywords = request.GET.get('keywords[]')
+       
+        
     # initialize to empty resultset so that we can use union operator 
-    data = models.Tag.objects.none()
+    data = models.Bid.objects.none()
     
     # Assumption : all of these tags already exist in the database
     for tag in tags:
@@ -194,13 +198,14 @@ def querybids(request):
             newTag = models.Tag.objects.get(name=tag)
             data = data | (filtrate(newTag.bid_set.all()))
         except Exception, e:
-            # TODO(andrey) change this to use the logger, since we want to know
-            # if this code path gets hit. I guess that actually means:
-            # TODO(andrey) figure out logging shit
+            #TODO log(e)
             print "THIS CODE PATH HURTS MAKE IT STOP ='["
 
+    #TODO add keyword search
 
     return JsonResponse(map(simplify, data))
+
+
 
 @csrf_exempt
 def alltags(request):
