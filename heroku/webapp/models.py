@@ -25,11 +25,15 @@ class Transaction(models.Model):
     """ Records a transaction between two users """
     # related_name is what this field is called in the reverse relation django
     # automatically makes from User back to Transaction
-    buyer = models.ForeignKey(User, related_name='transaction_buyer')
-    seller = models.ForeignKey(User, related_name='transaction_seller')
+    from_user = models.ForeignKey(User, related_name='transaction_from_user')
+    to_user = models.ForeignKey(User, related_name='transaction_to_user')
     
     amount = models.IntegerField()
     time = models.DateTimeField(auto_now_add=True) # defaults to datetime row is created
+    bid = models.ForeignKey(Bid, null=True)
+    
+    def __unicode__(self):
+        return str(self.from_user) + " sent " + str(self.amount) + " to " + str(self.to_user)
 
 class BidInteraction(models.Model):
     """ A bid interaction represents an offer for a particular bid and all related info. """
