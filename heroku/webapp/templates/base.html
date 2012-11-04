@@ -24,14 +24,15 @@
   
         <div id="header">
             <div class ="heading">TODO</div>
-        <div>
         
-        {% if user.is_authenticated %}
-            Signed in as: {{ user.username }}
-            <a href="/signout">Sign out</a>
-        {% else %}
-            <a href="/signin">Sign in</a>
-        {% endif %}
+            {% if user.is_authenticated %}
+                Signed in as: {{ user.username }}
+                <a href="/signout">Sign out</a>
+            {% else %}
+                <a href="/signin">Sign in</a>
+            {% endif %}
+   
+        </div>
     
         <div id="container">
             {% block content %}

@@ -22,10 +22,20 @@
     title: <%= title %> <br/ >
     expire time: <%= expiretime %> <br />
     tags: <%= tags %> <br />
-    <br />
+    <div id="more_<%= id %>" class="hidden">
+        <input type="textarea" name="response" data-bidid="<%= id %>"></input>
+        <button class="add_response" data-bidid="<%= id %>">add response</button>
+    </div>
+    <a onclick="expand_bid(<%= id %>);"> expand </a>
 </script>
 
 
 <script type="text/javascript" src="/static/feed.js"></script>
+<script type-"text/javascript">
+    function expand_bid(id) {
+        $('#more_' + id).toggle('hidden');
+    };
+</script>
+
 
 {% endblock %}

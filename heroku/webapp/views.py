@@ -37,8 +37,47 @@ def render_to(template, mimetype=None):
         return wrapper
     return renderer
 
+def _sql_lock_string(sql):
+    return sql + ' FOR UPDATE' 
+
+def _lock_dat_shit(model_instance, field):
+    """ 
+        Given a model instance and a field name (string), calling this function
+        will lock the row corresponding to the model instance until an UPDATE is
+        called on that row, and then update that field on the model instance with
+        the locked value in the DB. 
+        YOU MUST CALL THIS FUNCTION FROM SOMETHING WRAPPED IN @transaction.commit_on_success
+        WHICH ALSO CALLS model_instance.save() OR ELSE I CAN'T GUARANTEE WTF WILL HAPPEN
+        This means you MUST wrap this in a try block where you release the lock in 
+        "finally" in case shit goes wrong.
+    """
+    #TODO make this into something I can use in a 'with' block
+
+    model_type = model_instance.__class__
+    query = model_type.objects.filter(id = model_instance.id).values_list(field)
+    
+    # get the SQL that django would have generated
+    (raw_sql, params) = query._as_sql(connection=connection)
+    sql = ''
+
+    # don't do anything locally because SQLite sucks
+    # TODO(nikolai) set up postgres on dev machine so that we don't have to deploy to test
+    if settings.DEBUG:
+        sql = raw_sql
+    else:
+        sql = _sql_lock_string(raw_sql)
+
+    # LOCK DAT SHIT
+    cursor = connection.cursor()
+    cursor.execute(sql, params)
+    
+    # MAKE SURE NOBODY FUCKS WITH OUR FIELD, YO
+    field_value = cursor.fetchone()[0]
+    setattr(model_instance, field, field_value)
+
 
 # End helper functions
+
 
 @render_to('index.html')
 def index(request):
@@ -110,52 +149,30 @@ def feed(request):
     return {}
 
 @login_required
-@render_to('interaction.html')
-def newinteraction(request):
-    if request.method == 'POST':
-        #Assuming that the bid exists, if this is called
-        bid = models.Bid.objects.get(title=request.POST.get('bidTitle'))
-        #title = request.POST.get('bidTitle')
-        offer = request.POST.get('offer')
-        #user = request.POST.get('username')
-        user = User.objects.get(username=request.POST.get('username'))
-    
-        createInteraction(bid, offer, user)
-    
-        #TODO(andrey) Make a good default page for successful submission of a bid-interaction
-        #Probably not leave the feed page, but just have your new interaction show up as a message
-        #(imagine it being like posting a comment on something on facebook)
-        return HttpResponse("good job") 
-    else: 
-        return {}
-    
-#API under discussion
-def createInteraction(bid, offer, user):
-    interaction = models.BidInteraction()
-    interaction.parentBid = bid
-    interaction.offerAmount = offer
-    interaction.owner = user
-
-    #TODO enforce this in a cleaner way
+def add_message(request):
+    """ Hit by an AJAX call. Adds the given message to the bid's interaction. If no
+        interaction exists, it makes one. """
     try:
-        models.BidInteraction().objects.get(owner=user, parentBid=bid)
-        print "There already exists an interaction for that user and bid"
-        # error case, there should only be one bid interaction per user
-        # logger throws a fit right here
-    except Exception, e:
-        interaction.save()
+        user = request.user
+        bid = models.Bid.objects.get(id=request.POST.get('bidID')) 
+        interaction = models.BidInteraction.objects.get_or_create(parentBid=bid, owner=user)
 
-#Ideally this method is only called when the interaction is already known (up for discussion)
-#API under discussion    
-def createMessage(user, interaction, text):
-    message = models.InteractionMessage()
-    message.owner = user
-    message.interaction = interaction
-    message.text = text
-    message.save()
+        msg = models.InteractionMessage()
+        msg.interaction = interaction
+        msg.text = request.POST.get('message', '')
+        msg.timestamp = datetime.now()
+        msg.owner = request.user # exists because of login_required
+        msg.save()
+        return JsonResponse({'success': True})
     
-#API under discussion
-#This is called for the successful termination of an interaction (and will trigger an exchange of credits)  
+    except Exception, e:
+        #TODO log
+        return JsonResponse({'success': False, 'msg': "Something went wrong"})
+
+
+# API under discussion
+# This is called for the successful termination of an interaction 
+# (and will trigger an exchange of credits)  
 def closeInteraction(interaction):
     bid = interaction.parentBid    
     #TODO(andrey) discuss and implement bid closure
@@ -164,17 +181,20 @@ def closeInteraction(interaction):
     try_transact_funds(bid.owner, interaction.owner, interaction.offerAmount, bid)
 
 
-@login_required
-@render_to('activity.html')
-def activitypage(request):
+def getInteractionsForUser(request):
+    """ JSON: Gets bids that this user responded to, as well as all of the messages """ 
     user = request.user
-    
     bids = models.Bid.objects.filter(owner=user)
-
     interactions = models.BidInteraction.objects.filter(owner=user)    
-    
-    return { 'bids': bids, 'interactions': interactions }
+    interaction_dicts = []
+    for interaction in interactions:
+        pass         
 
+    return { 'bids': bids, 'interactions': interaction_dicts }
+
+
+def getMessagesForBid(request):
+    pass
 
 @login_required
 @render_to('post.html')
@@ -207,9 +227,10 @@ def newbid(request):      # TODO in progress, don't touch
             newTag = models.Tag(name = tag)
             newTag.save()
             tagModels.append(newTag)
-                
+       
+        # stupid fix to get the bid to have a pk so the many-to-many relationship works 
+        bid.save()        
         bid.tags = tagModels
-        
         bid.save()
 
         #TODO(andrey)  there is some good default page for successfully saving a bid
@@ -222,7 +243,7 @@ def querybids(request):
         # TODO(nikolai) replace this with a better serialization solution
     def simplify(bid):
         ret = {}
-        ret['pk'] = bid.pk
+        ret['id'] = bid.id
         ret['title'] = bid.title
         ret['description'] = bid.description
         ret['expiretime'] = str(bid.expiretime)
@@ -339,45 +360,6 @@ def profile(request, username=''):
 ## Assumes credits never overflow.
 
 from django.db import transaction
-
-
-def _sql_lock_string(sql):
-    return sql + ' FOR UPDATE' 
-
-def _lock_dat_shit(model_instance, field):
-    """ 
-        Given a model instance and a field name (string), calling this function
-        will lock the row corresponding to the model instance until an UPDATE is
-        called on that row, and then update that field on the model instance with
-        the locked value in the DB. 
-        YOU MUST CALL THIS FUNCTION FROM SOMETHING WRAPPED IN @transaction.commit_on_success
-        WHICH ALSO CALLS model_instance.save() OR ELSE I CAN'T GUARANTEE WTF WILL HAPPEN
-        This means you MUST wrap this in a try block where you release the lock in 
-        "finally" in case shit goes wrong.
-    """
-    #TODO make this into something I can use in a 'with' block
-
-    model_type = model_instance.__class__
-    query = model_type.objects.filter(id = model_instance.id).values_list(field)
-    
-    # get the SQL that django would have generated
-    (raw_sql, params) = query._as_sql(connection=connection)
-    sql = ''
-
-    # don't do anything locally because SQLite sucks
-    # TODO(nikolai) set up postgres on dev machine so that we don't have to deploy to test
-    if settings.DEBUG:
-        sql = raw_sql
-    else:
-        sql = _sql_lock_string(raw_sql)
-
-    # LOCK DAT SHIT
-    cursor = connection.cursor()
-    cursor.execute(sql, params)
-    
-    # MAKE SURE NOBODY FUCKS WITH OUR FIELD, YO
-    field_value = cursor.fetchone()[0]
-    setattr(model_instance, field, field_value)
 
 def record_transaction(from_username, to_username, amount, timestamp, bid=None):
     """ Just records the transaction. Assumes caller is handling correctness / locking. """

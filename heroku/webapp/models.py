@@ -11,7 +11,7 @@ class Tag(models.Model):
 # Requests for help.
 class Bid(models.Model):
     owner = models.ForeignKey(User)
-    title = models.CharField(max_length=100, primary_key=True)
+    title = models.CharField(max_length=100)
     description = models.CharField(max_length=1000)
     initialOffer = models.IntegerField()
     tags = models.ManyToManyField(Tag)
@@ -38,7 +38,6 @@ class Transaction(models.Model):
 class BidInteraction(models.Model):
     """ A bid interaction represents an offer for a particular bid and all related info. """
     parentBid = models.ForeignKey(Bid)
-    offerAmount = models.IntegerField()
     owner = models.ForeignKey(User)
     
     def __unicode__(self):

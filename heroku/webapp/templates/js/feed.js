@@ -13,6 +13,7 @@ var BidView = Backbone.View.extend({
     },
     render: function () {
         var vars = { 
+            id: this.model.get('id'),
             tags: this.model.get('tags'),
             expiretime: this.model.get('expiretime'),
             title: this.model.get('title'),
@@ -41,7 +42,7 @@ var BidResultsView = Backbone.View.extend({
     },
 
     add: function (bid) {
-        var bid_el = $('<div id="' + bid.get('pk') + '"></div>');
+        var bid_el = $('<div id="bid' + bid.get('id') + '"></div>');
         var bidview = new BidView({
             model: bid,
             el: bid_el,
@@ -73,6 +74,7 @@ function refreshWithQuery(args) {
         success: function(django_models) {
             _(django_models).each(function (djbid) {
                 var model = new BidModel({
+                    id: djbid.id,
                     title: djbid.title,
                     description: djbid.description,
                     // TODO add post time to bid everywhere    posttime: djbid.posttime,
