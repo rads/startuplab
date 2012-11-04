@@ -66,9 +66,6 @@ def signup(request):
     
     return {'form': form}
 
-
-
-
 @render_to('signin.html')
 #TODO refactor to not use django forms
 def signin(request):
@@ -113,17 +110,81 @@ def feed(request):
     return {}
 
 @login_required
+@render_to('interaction.html')
+def newinteraction(request):
+    if request.method == 'POST':
+        #Assuming that the bid exists, if this is called
+        bid = models.Bid.objects.get(title=request.POST.get('bidTitle'))
+        #title = request.POST.get('bidTitle')
+        offer = request.POST.get('offer')
+        #user = request.POST.get('username')
+        user = User.objects.get(username=request.POST.get('username'))
+    
+        createInteraction(bid, offer, user)
+    
+        #TODO(andrey) Make a good default page for successful submission of a bid-interaction
+        #Probably not leave the feed page, but just have your new interaction show up as a message
+        #(imagine it being like posting a comment on something on facebook)
+        return HttpResponse("good job") 
+    else: 
+        return {}
+    
+#API under discussion
+def createInteraction(bid, offer, user):
+    interaction = models.BidInteraction()
+    interaction.parentBid = bid
+    interaction.offerAmount = offer
+    interaction.owner = user
+
+    #TODO enforce this in a cleaner way
+    try:
+        models.BidInteraction().objects.get(owner=user, parentBid=bid)
+        print "There already exists an interaction for that user and bid"
+        # error case, there should only be one bid interaction per user
+        # logger throws a fit right here
+    except Exception, e:
+        interaction.save()
+
+#Ideally this method is only called when the interaction is already known (up for discussion)
+#API under discussion    
+def createMessage(user, interaction, text):
+    message = models.InteractionMessage()
+    message.owner = user
+    message.interaction = interaction
+    message.text = text
+    message.save()
+    
+#API under discussion
+#This is called for the successful termination of an interaction (and will trigger an exchange of credits)  
+def closeInteraction(interaction):
+    bid = interaction.parentBid    
+    #TODO(andrey) discuss and implement bid closure
+    
+    #TODO(andrey) error checking (and logging)
+    try_transact_funds(bid.owner, interaction.owner, interaction.offerAmount, bid)
+
+
+@login_required
+@render_to('activity.html')
+def activitypage(request):
+    user = request.user
+    
+    bids = models.Bid.objects.filter(owner=user)
+
+    interactions = models.BidInteraction.objects.filter(owner=user)    
+    
+    return { 'bids': bids, 'interactions': interactions }
+
+
+@login_required
 @render_to('post.html')
 def newbid(request):      # TODO in progress, don't touch
     if request.method == 'GET':
         return {}
 
     elif request.method == 'POST':
-        initialOffer = request.POST.get('initialOffer', 0)
-    
         raw_tags = request.POST.get('tags', '')
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))
-        print tags
         
         bid = models.Bid()
         bid.owner = request.user
@@ -329,6 +390,7 @@ def record_transaction(from_username, to_username, amount, timestamp, bid=None):
     
 
 @transaction.commit_on_success
+#TODO(nikolai) Do you really need both the bid and the from_username? In fact you can find all of this from just the interaction!
 def try_transact_funds(from_username, to_username, amount, bid=None):
     """ Returns (success, msg) tuple """
     try:

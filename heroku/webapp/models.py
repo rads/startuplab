@@ -44,7 +44,6 @@ class BidInteraction(models.Model):
     def __unicode__(self):
         return str(self.owner) + " responding to bid [" + str(self.bid) + "]";
     
-
 class InteractionMessage(models.Model):
     interaction = models.ForeignKey(BidInteraction) 
     text = models.CharField(max_length=10000)
