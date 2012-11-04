@@ -3,10 +3,12 @@ startuplab
 
 TODO (high priority)
 ----
-* andrey: save new tags from profile view (line ~245 of views.py in this commit)
+* andrey: save new tags from profile view 
 * andrey: design and implement bid interaction API
 * nikolai: superuser deploy hooks & backdoors
 * nikolai: credit transaction system
+* nikolai: static files bullshit
+* nikolai: general select2 helper functions (init/auto-populate)
 
 pages:
 - full feed page
@@ -21,7 +23,6 @@ BACKLOG (low priority)
 -------
 * andrey: search around for efficient ways to search for strings of text in active bids
 * andrey: figure out logging shit
-* nikolai: figure out static file bullshit on heroku
 * nikolai: cool thing http://tommoor.github.com/crumble/
 * nikolai: configure Postgres locally so we don't have to test the credit lock stuff on heroku
 * both: think about different cases for when people don't have enough credits for stuff.

@@ -209,6 +209,9 @@ def querybids(request):
 
 @csrf_exempt
 def alltags(request):
+    #TODO make this only get tags that have bids
+    # like if someone added a stupid tag nobody uses through their profile, don't
+    # auto-suggest it for people querying bids
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
@@ -371,11 +374,13 @@ def add_credit_backdoor(username, amount):
     user = User.objects.get(username=username)
     user_profile = user.profile
     _lock_dat_shit(user_profile, 'credits')
-    # safety zone start
-    user_profile.credits += amount
-    record_transaction('EXCHANGE', username, amount, datetime.now(), None)
-    # safety zone end
-    user_profile.save()
+    try:
+        # safety zone start
+        user_profile.credits += amount
+        record_transaction('EXCHANGE', username, amount, datetime.now(), None)
+    finally:
+        user_profile.save()
+        # safety zone end
 
 
 @csrf_exempt

@@ -101,6 +101,7 @@ function set_up_select(tags) {
 }
 
 $(function() {
+    // TODO populate tag bar with user's profile tags
     $.ajax({
         url: '/alltags',
         success: set_up_select,

@@ -19,8 +19,12 @@ urlpatterns = patterns('',
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
     (r'^alltags/$', views.alltags),
-    (r'^credit/$', views.credit_test),
 )
+
+if DEBUG:
+    urlpatterns += patterns('',
+        (r'^credit/$', views.credit_test),
+    )
 
 # Admin
 urlpatterns += patterns(
