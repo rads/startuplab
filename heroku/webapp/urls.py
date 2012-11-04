@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     (r'^index/$', views.index),
 
     (r'^user/(?P<username>.*)$', views.profile),
+    (r'^activity/$', views.activitypage),
     (r'^signup/$', views.signup),
     (r'^signin/$', views.signin),
     (r'^signout/$', views.signout),
@@ -24,6 +25,7 @@ urlpatterns = patterns('',
 if DEBUG:
     urlpatterns += patterns('',
         (r'^credit/$', views.credit_test),
+        (r'^interaction/$', views.newinteraction),
     )
 
 # Admin

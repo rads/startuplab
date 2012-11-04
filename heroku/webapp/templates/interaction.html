@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+
+    <br/> bidTitle:
+    <input type="text" name="bidTitle">
+
+    <br/> initial offer
+    <input type="text" name="offer">
+
+    <br/> user
+    <input type="text" name="username">
+
+    <br/>
+    <input type="submit" value="Create Interaction">
+</form>
+
+<script src="/static/post.js" type="text/javascript"></script>
+
+{% endblock %}
