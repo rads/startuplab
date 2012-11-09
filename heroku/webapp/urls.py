@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
     (r'^alltags/$', views.alltags),
+
+    (r'^msgforbid/$', views.getMessagesForBid),
 )
 
 if DEBUG:

@@ -194,7 +194,16 @@ def getInteractionsForUser(request):
 
 
 def getMessagesForBid(request):
-    pass
+    bidid = request.GET.get('id')
+    bid = models.Bid.objects.get(id=bidid)
+    interactions = models.BidInteraction.objects.filter(parentBid=bid)
+    ret = []
+    for interaction in interactions:
+        messages = models.InteractionMessage.objects.filter(interaction=interaction).order_by('timestamp')
+        map(messages, lambda x: {'name': x.owner.username, 'msg': x.text})
+        ret.push(messages)
+
+    return JsonResponse(ret)
 
 @login_required
 @render_to('post.html')

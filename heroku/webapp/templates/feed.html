@@ -35,6 +35,22 @@
     function expand_bid(id) {
         $('#more_' + id).toggle('hidden');
     };
+    
+    function makeMessageBox(bid_id) {
+        $.get({
+            url: '/msgforbid',
+            data: {'id': bid_id},
+            success: function(data) {
+                var ret = "<div>";
+                _(data).each(function(msg_list) {
+                    ret += "<div>";
+                    _(msg_list).each(function(msg) {
+                        
+                    });
+                })
+            }
+        });
+    };
 </script>
 
 
