@@ -257,6 +257,7 @@ def querybids(request):
         ret['description'] = bid.description
         ret['expiretime'] = str(bid.expiretime)
         ret['posttime'] = str(bid.posttime)
+        ret['amount'] = bid.initialOffer
         # TODO get the list of tag names for tags it has
         # I tried  map(lambda x: x.name, bid.tags)  but it doesn't work
         # also tried  list(bid.tags)  but it's not a queryset so that doesn't work

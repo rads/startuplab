@@ -62,10 +62,9 @@ var resultsview;
 
 
 function refreshWithQuery(args) {
-    //TODO(nikolai) figure out how to remove things from backbone views properly
     bidresults = new BidResults([]);
     resultsview.bidviews = [];
-
+    resultsview.$el.html("Loading...");
     $.ajax({
         url: '/querybids',
         method: 'GET',
@@ -120,7 +119,6 @@ $(function() {
     refreshWithQuery();
     
     $('#searchtags').change(function(event) {
-        console.log('change');
         if ($('#searchtags').val() == '') {
             refreshWithQuery();
         } else {
