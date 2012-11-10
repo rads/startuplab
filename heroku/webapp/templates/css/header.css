@@ -1,0 +1,57 @@
+#header {
+height: 40px;
+background: #f7f7f8;
+border-bottom: 1px solid #ecedee;
+outline: 1px solid #cdcfd0;
+}
+.nav {
+width: 830px;
+margin: 0 auto;
+clear: both;
+}
+.links ul {
+display: inline;
+list-style: none;
+list-style-type: none;
+margin: 0;
+}
+.links li {
+display: inline;
+list-style: none;
+list-style-type: none;
+}
+.links a {
+font: 11px/12px 'Tahoma', sans-serif;
+color: #cdcfd0;
+font-weight: bold;
+text-decoration: none;
+text-transform: uppercase;
+padding: 15px;
+margin: -1px 0;
+}
+.leftmost a {
+float: left;
+border-left: 1px solid #ecedee;
+border-right: 1px solid #ecedee;
+outline: 1px solid #cdcfd0;
+}
+.restmost a {
+float: left;
+border-right: 1px solid #ecedee;
+}
+.rightmost a {
+float: left;
+border-left: 1px solid #ecedee;
+border-right: 1px solid #ecedee;
+outline: 1px solid #cdcfd0;
+}
+.signin a {
+float: right;
+border-left: 1px solid #ecedee;
+border-right: 1px solid #ecedee;
+outline: 1px solid #cdcfd0;
+}
+.links a:hover {
+background: #93969a;
+color: #f7f7f8;
+}

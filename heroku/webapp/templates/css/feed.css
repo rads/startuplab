@@ -1,0 +1,86 @@
+#feed {
+    width: 830px;
+    margin: 35px auto;
+}
+.left {
+    width: 405px;
+    float: left;
+    height: 100%;
+    margin-bottom: 50px;
+}
+.right {
+    width: 405px;
+    float: right;
+}
+.orange {
+    color: #fbb036;
+    background: #fbb036;
+}
+.grey {
+    color: #83868a;
+    background: #66686b;
+}
+.purple {
+    color: #9a559a;
+    background: #6a3a6a;
+}
+.blue {
+    color: #76cdd3;
+    background: #76cdd3;
+}
+.green {
+    color: #a5d555;
+    background: #96c34a;
+}
+.user {
+    padding-right: 5px;
+}
+.post {
+    font: 16px/20px 'RalewayThin', sans-serif;
+    color: #fff;
+    padding: 18px;
+    height: 100px;
+    margin-bottom: 0px;
+    border-bottom: 1px solid rgba(96, 98, 101, .2);
+}
+.small {
+    font: 10px/12px 'Arial', sans-serif;
+    letter-spacing: 1px;
+}
+.info {
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: -18px -18px 0 0;
+    background-color: rgba(86, 88, 91, .4);
+    width: 100px;
+    height: 20px;
+    float: right;
+}
+.credits {
+    margin-top: -19px;
+    margin-left: 27px;
+}
+.classlabel {
+    text-transform: uppercase;
+    font-weight: bold;
+    opacity:0.9;
+    filter:alpha(opacity=90);
+    margin-top: 7px;
+    margin-bottom: 12px;
+}
+.time {
+    font: 9px/12px 'Arial', sans-serif;
+    opacity:0.8;
+    filter:alpha(opacity=80);
+    margin-top: 15px;
+}
+.tags {
+    color: #FFF;
+    text-transform: uppercase;
+    padding: 8px 8px 8px 18px;
+    height: 15px;
+    margin-top: 0px;
+    margin-bottom: 20px;
+    border-top: 1px solid rgba(195, 196, 199, .5);
+}
+

@@ -1,3 +1,4 @@
+var colors = ['orange', 'blue', 'grey', 'purple'];
 var BidModel = Backbone.Model.extend({
     
 });
@@ -14,9 +15,12 @@ var BidView = Backbone.View.extend({
     render: function () {
         var vars = { 
             id: this.model.get('id'),
-            tags: this.model.get('tags'),
-            expiretime: this.model.get('expiretime'),
             title: this.model.get('title'),
+            description: this.model.get('description'),
+            tagstring: this.model.get('tags').join(', '),
+            expire_time_text: this.model.get('expiretime'),
+            color: 'blue',
+            amount: this.model.get('amount'),
         };
         var template = _.template($('#bid_template').html(), vars);
         this.$el.html(template) 
@@ -33,11 +37,12 @@ var BidResultsView = Backbone.View.extend({
     },
 
     render: function() {
-        $(this.el).empty();
         var self = this;
+        self.$el.empty();
+
         _(this.bidviews).each(function (bv) { 
             bv.render();
-            $(self.el).append(bv.el);
+            $(self.$el).append(bv.$el.html());
         });
     },
 
@@ -52,20 +57,14 @@ var BidResultsView = Backbone.View.extend({
     
 });
 
-
-
-var bidresults = new BidResults([]);
-var resultsview = new BidResultsView({
-    collection: bidresults,
-    el: $('#feed_container'),
-});
+var bidresults;
+var resultsview;
 
 
 function refreshWithQuery(args) {
     //TODO(nikolai) figure out how to remove things from backbone views properly
     bidresults = new BidResults([]);
     resultsview.bidviews = [];
-    $('#feed_container').html('');
 
     $.ajax({
         url: '/querybids',
@@ -81,20 +80,21 @@ function refreshWithQuery(args) {
                     expiretime: djbid.expiretime,
                     pk: djbid.pk, 
                     tags: djbid.tags,
+                    text: djbid.text,
 
                 });
                 resultsview.add(model);
             });
             resultsview.render();
         },
-        error: function () { alert("AJAX FAIL"); }
+        error: function () { console.log('Something went very wrong'); }
     });
 }
 
 /// CAUTION: CODE RE-USE
 //TODO refactor
 function set_up_select(tags) {
-    $('#searchtags').select2({
+    $('#searchbar').select2({
         minimumInputLength: 0,
         tokenSeparators: [',', ';'],
         tags: _(tags).map(function(tag) {return{'id': tag, 'text': tag};}),
@@ -103,7 +103,13 @@ function set_up_select(tags) {
 }
 
 $(function() {
-    // TODO populate tag bar with user's profile tags
+    bidresults = new BidResults([]);
+    resultsview = new BidResultsView({
+        collection: bidresults,
+        el: $('#feed'),
+    });
+
+   // TODO populate tag bar with user's profile tags
     $.ajax({
         url: '/alltags',
         success: set_up_select,

@@ -29,3 +29,4 @@ BACKLOG (low priority)
 * for example, if you respond to a help request, the person making the request should see
 * if the responder doesn't actually have enough credits to pay.
 * both: write tests LOL yeah right
+* clean up fonts folder

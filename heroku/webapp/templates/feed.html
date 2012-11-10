@@ -1,57 +1,63 @@
 {% extends "base.html" %}
 
-{% block title %} Browse Help Requests {% endblock %}
+{% block title %}Question Feed{% endblock %}
+
+{% block styles %}
+    <link href="/static/feed.css" rel="stylesheet" type="text/css">
+    <link href="/static/filters.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/feed.js"></script>
+{% endblock %}
 
 {% block content %}
+<div id="search">
+    <form action="" method="post">
+        <input type="button" class="glass" value="Search" />
+        <input class="searchbar" type="text" placeholder="Add some tags.." name="search" value="" />
+    </form>
 
-<div id="search_container">
-    search text: <input type="text" id="searchtext"> </input> <br />
-    tags: <input type="text" id="searchtags"> </input> <br />
-    <button id="search">search</button> <br />
-    more filters will go here 
+    <!--
+    <div class="filters">
+        <select name="all" class="default">
+            <option class="filters">All Questions</option>
+        </select>
+        <ul>
+            <li class="filters"><a href="#">Filter One</a></li>
+            <li class="filters"><a href="#">Filter Two</a></li>
+            <li class="filters"><a href="#">Filter Three</a></li>
+            <li class="filters"><a href="#">Filter Four</a></li>
+            <li class="filters"><a href="#">Filter Five</a></li>
+            <li class="filters"><a href="#">Filter Six</a></li>
+            <li class="filters"><a href="#">Filter Seven</a></li>
+            <li class="filters"><a href="#">Filter Eight</a></li>
+        </ul>
+    </div>
+    -->
+
 </div>
-<br/><br/>
-
-
-<div id="feed_container">
-
-</div>
-
 
 <script type="text/template" id="bid_template">
-    title: <%= title %> <br/ >
-    expire time: <%= expiretime %> <br />
-    tags: <%= tags %> <br />
-    <div id="more_<%= id %>" class="hidden">
-        <input type="textarea" name="response" data-bidid="<%= id %>"></input>
-        <button class="add_response" data-bidid="<%= id %>">add response</button>
+    <div class="post <%= color %>">
+        <div class="info <%= color %> small">
+            <img src="/static/credit.png" class="user" />
+            <div class="credits">
+                <%= amount %> Credits
+            </div>
+        </div>
+        <div class="small classlabel"> <%= title %> </div>
+        <%= description %>
+
+        <div class="time"><%= expire_time_text %></div>
     </div>
-    <a onclick="expand_bid(<%= id %>);"> expand </a>
+    <div class="small tags <%= color %>">
+        <%= tagstring %>
+    </div>
 </script>
-
-
-<script type="text/javascript" src="/static/feed.js"></script>
-<script type-"text/javascript">
-    function expand_bid(id) {
-        $('#more_' + id).toggle('hidden');
-    };
-    
-    function makeMessageBox(bid_id) {
-        $.get({
-            url: '/msgforbid',
-            data: {'id': bid_id},
-            success: function(data) {
-                var ret = "<div>";
-                _(data).each(function(msg_list) {
-                    ret += "<div>";
-                    _(msg_list).each(function(msg) {
-                        
-                    });
-                })
-            }
-        });
-    };
-</script>
-
+  
+<div id="feed">
+    No results for you!
+</div>
 
 {% endblock %}
