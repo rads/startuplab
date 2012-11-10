@@ -76,7 +76,8 @@ function refreshWithQuery(args) {
                     id: djbid.id,
                     title: djbid.title,
                     description: djbid.description,
-                    // TODO add post time to bid everywhere    posttime: djbid.posttime,
+                    amount: djbid.amount,
+                    posttime: djbid.posttime,
                     expiretime: djbid.expiretime,
                     pk: djbid.pk, 
                     tags: djbid.tags,
@@ -94,11 +95,11 @@ function refreshWithQuery(args) {
 /// CAUTION: CODE RE-USE
 //TODO refactor
 function set_up_select(tags) {
-    $('#searchbar').select2({
+    $('#searchtags').select2({
         minimumInputLength: 0,
         tokenSeparators: [',', ';'],
-        tags: _(tags).map(function(tag) {return{'id': tag, 'text': tag};}),
-        width: '200px',
+        tags: _(tags).map(function(tag) {return {'id': tag, 'text': tag};}),
+        width: '100%',
     });
 }
 
@@ -114,10 +115,12 @@ $(function() {
         url: '/alltags',
         success: set_up_select,
         type: 'json',
-
     });
+
     refreshWithQuery();
-    $('button#search').click(function(event) {
+    
+    $('#searchtags').change(function(event) {
+        console.log('change');
         if ($('#searchtags').val() == '') {
             refreshWithQuery();
         } else {

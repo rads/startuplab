@@ -256,10 +256,11 @@ def querybids(request):
         ret['title'] = bid.title
         ret['description'] = bid.description
         ret['expiretime'] = str(bid.expiretime)
+        ret['posttime'] = str(bid.posttime)
         # TODO get the list of tag names for tags it has
         # I tried  map(lambda x: x.name, bid.tags)  but it doesn't work
         # also tried  list(bid.tags)  but it's not a queryset so that doesn't work
-        ret['tags'] = ["TODO"]
+        ret['tags'] = ["TODO1", "TODO2"]
         return ret
 
     # Applies the various filters to a query

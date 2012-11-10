@@ -1,76 +1,79 @@
 #search {
-width: 830px;
-clear: both;
-height: 60px;
-margin: 55px auto 0 auto;
+    width: 830px;
+    clear: both;
+    height: 60px;
+    margin: 55px auto 0 auto;
 }
 .filters ul {
-display: inline;
-list-style: none;
-list-style-type: none;
-margin: 0;
+    display: inline;
+    list-style: none;
+    list-style-type: none;
+    margin: 0;
 }
 .filters li {
-display: inline;
-list-style: none;
-list-style-type: none;
+    display: inline;
+    list-style: none;
+    list-style-type: none;
 }
 .filters a {
-display: inline;
-background: #ecedee;
-font: 10px/12px 'Arial', sans-serif;
-color: #cdcfd0;
-text-decoration: none;
-text-align: center;
-padding: 6px 12px;
-margin: 0;
-width: 62px;
-float: left;
-border-right: 1px solid #cdcfd0;
-border-top: 1px solid #e5e6e7;
-border-bottom: 1px solid #e5e6e7;
+    display: inline;
+    background: #ecedee;
+    font: 10px/12px 'Arial', sans-serif;
+    color: #cdcfd0;
+    text-decoration: none;
+    text-align: center;
+    padding: 6px 12px;
+    margin: 0;
+    width: 62px;
+    float: left;
+    border-right: 1px solid #cdcfd0;
+    border-top: 1px solid #e5e6e7;
+    border-bottom: 1px solid #e5e6e7;
 }
 .filters a:hover {
-background: #93969a;
-color: #f7f7f8;
+    background: #93969a;
+    color: #f7f7f8;
 }
 .filters select, .filters option {
-display: inline;
-background: #cfd0d2;
-font: 11px/12px 'Arial', sans-serif;
-font-weight: bold;
-text-transform: uppercase;
-color: #f7f7f8;
-border: 1px solid #aaacae;
-float: left;
-padding: 3px 4px 3px 8px;
-width: 134px;
-height: 26px;
-margin: 0;
+    display: inline;
+    background: #cfd0d2;
+    font: 11px/12px 'Arial', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #f7f7f8;
+    border: 1px solid #aaacae;
+    float: left;
+    padding: 3px 4px 3px 8px;
+    width: 134px;
+    height: 26px;
+    margin: 0;
 }
-.searchbar {
-background: #fff;
-font: 11px/12px 'Arial', sans-serif;
-color: #cfd0d2;
-height: 19px;
-padding: 2px 3px 3px 3px;
-float: right;
-width: 798px;
-border-left: 1px solid #e5e6e7;
-border-top: 1px solid #e5e6e7;
-border-right: none;
-border-bottom: 1px solid #e5e6e7;
+x.searchbar {
+    background: #fff;
+    font: 11px/12px 'Arial', sans-serif;
+    color: #cfd0d2;
+    height: 19px;
+    padding: 2px 3px 3px 3px;
+    float: right;
+    width: 798px;
+    border-left: 1px solid #e5e6e7;
+    border-top: 1px solid #e5e6e7;
+    border-right: none;
+    border-bottom: 1px solid #e5e6e7;
 }
 .glass {
-text-indent: -99999px; 
-width: 25px; 
-height: 26px;
-padding: 3px 1px 1px 1px; 
-display: inline;
-float: right;
-border: none;
-background: #fff url(/static/glass.jpg) 0 0 no-repeat; 
-border-top: 1px solid #e5e6e7;
-border-right: 1px solid #e5e6e7;
-border-bottom: 1px solid #e5e6e7;
+    text-indent: -99999px; 
+    width: 25px; 
+    height: 26px;
+    padding: 3px 1px 1px 1px; 
+    display: inline;
+    float: right;
+    border: none;
+    background: #fff url(/static/glass.jpg) 0 0 no-repeat; 
+    border-top: 1px solid #e5e6e7;
+    border-right: 1px solid #e5e6e7;
+    border-bottom: 1px solid #e5e6e7;
+}
+.glass:hover {
+    background: #eee;
 }

@@ -21,3 +21,7 @@ img {
     margin: 0 auto;
     padding-top: 20px;
 }
+#container {
+    margin: 25px auto;
+    width: 830px;
+}
