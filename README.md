@@ -12,7 +12,7 @@ Monday Deadline
 - UI shit (mostly steph):
 * fix fonts for tags
 * credits icon
-* feed bid credit css shit
+* fix feed bid css
 
 
 TODO (high priority)

@@ -454,3 +454,76 @@ def credit_test(request):
     return HttpResponse(res)
 
 
+
+
+
+#TODO(andrey)  start of your new assignment
+
+
+# just a helper function, read the others to understand why we use it
+def _single_interaction_dict(bidID, userID):
+    """ Populates a dictionary with all the information from a single interaction """
+
+    # basically we need to translate the bits of the models we care about
+    # into simple dictionaries because we can serialize them easily
+
+    sample_message_dict = {
+        'owner_name': 'username of person who wrote this message',
+        'text': 'yo this is a message holmes',
+        'timestamp': '10/10/10  tostring() that shit'
+    }
+
+    sample_interaction_dict = {
+        'responder_id': None,
+        'messages': [sample_message_dict], # maybe sort by timestamp on server side?
+    }
+
+    return sample_interaction_dict
+
+
+def single_bid_page(request, bidID):
+    """ 
+    Hit from /questions/<bidID>
+    If the user is the owner, display the question
+    and links to all interactions. If the user is not the owner, redirect to 
+    /question/<bidID>/<userID>    (userID for logged in user)
+    """
+    
+        # This is just pseudocode, do not assume any of it works!
+
+    if True: # is the logged in user the owner of this bid?
+        interaction1 = _single_interaction_dict(bidID, request.user)
+        # etc
+
+        content_dict = {
+            'interactions': [interaction1],
+        }       
+
+    else:
+        pass #redirect to single_interaction_page for this interaction
+
+    
+    return JsonResponse(content_dict)
+
+def single_interaction_page(request, bidID, userID):
+    """
+    Hit from /questions/<bidID>/<userID>
+    This shows the interaction between the bid owner and user from url.
+    This should create an interaction for this user if the user has not interacted with
+    the bid yet.
+    """
+    content_dict = _single_interaction_dict(bidID, userID)
+
+    return JsonResponse(content_dict)
+
+def direct_add_message(request):
+    """
+    Can be hit from anywhere a bid can be responded to (feed page, bid pages).
+    If the user is not the owner, make sure an interaction exists and then add the message.
+    """
+    message = request.POST.get('message')
+    # save it
+    return JsonResponse("success")
+    
+def bid_owner_init_transaction(request):
+    pass
