@@ -1,6 +1,20 @@
 startuplab
 ==========
 
+Monday Deadline
+---------------
+
+- question page
+* /questions/<questionID> for logged in user (see all interactions)
+* /questions/<questionID> for all other users (jump straight to interaction
+* /questions/<questionID>/<responderID> goes straight to an interaction
+
+- UI shit (mostly steph):
+* fix fonts for tags
+* credits icon
+* feed bid credit css shit
+
+
 TODO (high priority)
 ----
 * andrey: save new tags from profile view 

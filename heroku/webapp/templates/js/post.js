@@ -1,15 +1,15 @@
 // setup
 $(function () {
-    $('#expiretime').datepicker();
+    $('.date').datepicker();
 
         
     
     function set_up_select(tags) {
         $('#tags').select2({
-            minimumInputLength: 1,
+            minimumInputLength: 0,
             tokenSeparators: [',', ';'],
             tags: _.map(tags, function(tag) { return {'id': tag, 'text': tag}; }),
-            width: '200px',
+            placeholder: "Start typing...",
         });
     }
 
