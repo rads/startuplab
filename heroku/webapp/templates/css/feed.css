@@ -2,18 +2,18 @@
     width: 830px;
     margin: 15px auto;
 }
-.left {
+.feed.left {
     width: 405px;
     float: left;
     height: 100%;
     margin-bottom: 50px;
 }
-.right {
+.feed.right {
     width: 405px;
     float: right;
 }
 .orange {
-    color: #fbb036;
+    color: #fff;
     background: #fbb036;
 }
 .grey {
@@ -25,11 +25,11 @@
     background: #6a3a6a;
 }
 .blue {
-    color: #76cdd3;
+    color: #eef;
     background: #76cdd3;
 }
 .green {
-    color: #a5d555;
+    color: #fff;
     background: #96c34a;
 }
 .user {
@@ -50,11 +50,13 @@
 .info {
     text-transform: uppercase;
     font-weight: bold;
-    margin: -18px -18px 0 0;
     background-color: rgba(86, 88, 91, .4);
+}
+.post .info {
+    float: right;
+    margin: -18px -18px 0 0;
     width: 100px;
     height: 20px;
-    float: right;
 }
 .post .credits {
     margin-top: -19px;
@@ -80,7 +82,7 @@
     padding: 8px 8px 8px 18px;
     height: 15px;
     margin-top: 0px;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     border-top: 1px solid rgba(195, 196, 199, .5);
 }
 

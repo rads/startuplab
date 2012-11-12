@@ -11,7 +11,8 @@ img {
     padding-bottom: 6px;
 }
 #footer {
-    position: absolute;
+    position: fixed;
+    bottom: 0;
     background: #3f3b4e;
     width: 100%;
     height: 35px;

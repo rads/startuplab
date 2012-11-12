@@ -1,0 +1,18 @@
+.message {
+    padding: 0px;
+    width: 75%;
+    margin-bottom: 12px;
+    min-height: 60px;
+}
+.message.left {
+    float: left;
+}
+.message.right {
+    float: right
+}
+
+.message .info {
+    padding: 5px;
+    width: 150px;
+    height: 12px;
+}

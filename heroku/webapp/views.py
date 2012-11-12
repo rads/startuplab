@@ -267,6 +267,13 @@ def querybids(request):
     def filtrate(obj):
         return obj
 
+    # Get a specific bid by id
+
+    if request.GET.get('bidID'):
+        bid = models.Bid.objects.get(id=request.GET.get('bidID'))
+        print bid
+        return JsonResponse(simplify(bid))
+
     # for now this is a sane default. Eventually server should set a hard 
     # max on how many it gets from the DB
     if request.GET.getlist('tags[]') == [] and request.GET.getlist('keywords[]') == []:
@@ -277,8 +284,8 @@ def querybids(request):
         tags = request.GET.getlist('tags[]')
     
     keywords = []
-    if request.GET.get('keywords[]'):
-        keywords = request.GET.get('keywords[]')
+    if request.GET.getlist('keywords[]'):
+        keywords = request.GET.getlist('keywords[]')
        
         
     # initialize to empty resultset so that we can use union operator 
@@ -509,16 +516,6 @@ def single_bid_page(request, bidID):
     
     return JsonResponse(content_dict)
 
-def single_interaction_page(request, bidID, userID):
-    """
-    Hit from /questions/<bidID>/<userID>
-    This shows the interaction between the bid owner and user from url.
-    This should create an interaction for this user if the user has not interacted with
-    the bid yet.
-    """
-    content_dict = _single_interaction_dict(bidID, userID)
-
-    return JsonResponse(content_dict)
 
 def direct_add_message(request):
     """
@@ -549,5 +546,7 @@ def single_interaction(request, bidID, userID):
 
     if request.GET.get('type', '') == 'json':
         return JsonResponse(_single_interaction_dict(bidID, userID))
+
+    content_dict = { 'bidID': bidID }    
 
     return content_dict
