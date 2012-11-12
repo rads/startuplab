@@ -17,7 +17,7 @@
     <form action="" method="post">
         {% csrf_token %}
 
-        I'm offering <input type="text" class="underline_entry credits" name="initialOffer">
+        > I'm offering <input type="text" class="underline_entry credits" name="initialOffer">
         credits  <span class="parenthetical">(you have {{ user.profile.credits }})</span>
         for help before <input type="text" class="underline_entry date" name="expiretime">
     

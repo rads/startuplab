@@ -37,6 +37,20 @@ def render_to(template, mimetype=None):
         return wrapper
     return renderer
 
+def simplify(bid):
+    ret = {}
+    ret['id'] = bid.id
+    ret['title'] = bid.title
+    ret['description'] = bid.description
+    ret['expiretime'] = str(bid.expiretime)
+    ret['posttime'] = str(bid.posttime)
+    ret['amount'] = bid.initialOffer
+    tags = []
+    for tag in bid.tags.all():
+        tags.append(tag.name)
+    ret['tags'] = tags
+    return ret
+
 def _sql_lock_string(sql):
     return sql + ' FOR UPDATE' 
 
@@ -249,21 +263,6 @@ def newbid(request):      # TODO in progress, don't touch
 @csrf_exempt
 def querybids(request):
     
-        # TODO(nikolai) replace this with a better serialization solution
-    def simplify(bid):
-        ret = {}
-        ret['id'] = bid.id
-        ret['title'] = bid.title
-        ret['description'] = bid.description
-        ret['expiretime'] = str(bid.expiretime)
-        ret['posttime'] = str(bid.posttime)
-        ret['amount'] = bid.initialOffer
-        # TODO get the list of tag names for tags it has
-        # I tried  map(lambda x: x.name, bid.tags)  but it doesn't work
-        # also tried  list(bid.tags)  but it's not a queryset so that doesn't work
-        ret['tags'] = ["TODO1", "TODO2"]
-        return ret
-
     # Applies the various filters to a query
     def filtrate(obj):
         return obj
@@ -467,6 +466,11 @@ def _single_interaction_dict(bidID, userID):
     # basically we need to translate the bits of the models we care about
     # into simple dictionaries because we can serialize them easily
 
+    sample_bid_dict = {
+        'owner_name': 'bid owner',
+
+    }
+
     sample_message_dict = {
         'owner_name': 'username of person who wrote this message',
         'text': 'yo this is a message holmes',
@@ -525,5 +529,25 @@ def direct_add_message(request):
     # save it
     return JsonResponse("success")
     
-def bid_owner_init_transaction(request):
+def close_transaction(request):
+    """
+    Terminates the transaction 
+    """
     pass
+
+
+@login_required
+@render_to('interaction.html')
+def single_interaction(request, bidID, userID):
+    """
+    Hit from /questions/<bidID>/<userID>
+    This shows the interaction between the bid owner and user from url.
+    This should create an interaction for this user if the user has not interacted with
+    the bid yet.
+    """
+
+
+    if request.GET.get('type', '') == 'json':
+        return JsonResponse(_single_interaction_dict(bidID, userID))
+
+    return content_dict
