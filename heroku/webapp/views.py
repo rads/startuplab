@@ -485,27 +485,22 @@ def credit_test(request):
 # just a helper function, read the others to understand why we use it
 def _single_interaction_dict(bidID, userID):
     """ Populates a dictionary with all the information from a single interaction """
+    interaction = models.BidInteraction.objects.get(parentBid=models.Bid.objects.get(id=bidID), owner=User.objects.get(id=userID))
+    messages = models.InteractionMessage.objects.filter(interaction=interaction)
+    message_list = []
+    
+    for message in messages:
+        message_dict = {'owner_name': message.owner.username,
+                        'text': message.text,                        
+                        'timestamp': str(message.timestamp)}
+        message_list.append(message_dict)
 
-    # basically we need to translate the bits of the models we care about
-    # into simple dictionaries because we can serialize them easily
-
-    sample_bid_dict = {
-        'owner_name': 'bid owner',
-
+    interaction_dict = {
+        'responder_id': interaction.owner.id,
+        'messages': sorted(message_list, key=lambda n: n['timestamp']),
     }
 
-    sample_message_dict = {
-        'owner_name': 'username of person who wrote this message',
-        'text': 'yo this is a message holmes',
-        'timestamp': '10/10/10  tostring() that shit'
-    }
-
-    sample_interaction_dict = {
-        'responder_id': None,
-        'messages': [sample_message_dict], # maybe sort by timestamp on server side?
-    }
-
-    return sample_interaction_dict
+    return interaction_dict
 
 
 def single_bid_page(request, bidID):
@@ -538,8 +533,10 @@ def direct_add_message(request):
     Can be hit from anywhere a bid can be responded to (feed page, bid pages).
     If the user is not the owner, make sure an interaction exists and then add the message.
     """
+    
     message = request.POST.get('message')
     # save it
+    
     return JsonResponse("success")
     
 def close_transaction(request):
