@@ -22,7 +22,6 @@ urlpatterns = patterns('',
 
     #(r'^questions/(?P<bidID>\d*)/$', views.single_bid),
     (r'^questions/(?P<bidID>\d*)/(?P<userID>\d*)$', views.single_interaction),
-
     
 )
 

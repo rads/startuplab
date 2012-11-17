@@ -2,8 +2,6 @@
 $(function () {
     $('.date').datepicker();
 
-        
-    
     function set_up_select(tags) {
         $('#tags').select2({
             minimumInputLength: 0,
@@ -18,10 +16,20 @@ $(function () {
         success: set_up_select,
         type: 'json'
     });
+    
+    $('#post_form').submit(function (e) {
+        e.preventDefault();
+        var self=this;
+        $.ajax({
+            url: '/post',
+            method: 'POST',
+            data: $(self).serialize(),
+            success: function () {
+            
+            },
+        });
+        console.log('test');
+    });
+
 });
 
-
-function validate_bid() {
-    $('#errors').val(''); 
-    return true;   
-}

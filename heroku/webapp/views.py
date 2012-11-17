@@ -221,17 +221,28 @@ def getMessagesForBid(request):
 
 @login_required
 @render_to('post.html')
-def newbid(request):      # TODO in progress, don't touch
+def newbid(request): 
     if request.method == 'GET':
         return {}
 
     elif request.method == 'POST':
+        print 'yep'
         raw_tags = request.POST.get('tags', '')
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))
         
         bid = models.Bid()
         bid.owner = request.user
-        bid.initialOffer = request.POST.get('initaialOffer', 0)
+        
+        def fail(name, msg):
+            return {'success': False, 'errors': { 'name': name, 'msg': msg}}
+
+        ## Begin data verification
+        #TODO more error checking!
+        amount = request.POST.get('initialOffer', '-1')
+        if not amount.isdigit():
+            return fail('amount', "Invalid  amount") 
+
+        bid.initialOffer = amount
         bid.title = request.POST.get('title')
 
         datetime_str = request.POST.get('expiretime')
@@ -243,6 +254,13 @@ def newbid(request):      # TODO in progress, don't touch
         raw_tags = request.POST.get('tags', '')
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))   
            
+
+        if len(errors) > 0:
+            return JsonResponse({'success': False, 'errors': errors})
+        
+        ## End data verification
+
+
         tagModels = []
                        
         for tag in tags:
@@ -256,9 +274,7 @@ def newbid(request):      # TODO in progress, don't touch
         bid.tags = tagModels
         bid.save()
 
-        #TODO(andrey)  there is some good default page for successfully saving a bid
-        # it's probably something out of the bid interaction user flow
-        return HttpResponse("good job") 
+        return JsonResponse({'redirect': '/questions/' + str(bid.id)})
 
 @csrf_exempt
 def querybids(request):

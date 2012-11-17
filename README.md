@@ -23,6 +23,7 @@ TODO (high priority)
 * nikolai: credit transaction system
 * nikolai: static files bullshit
 * nikolai: general select2 helper functions (init/auto-populate)
+* steph: title block in navbar, cross-browser testing
 
 pages:
 - full feed page
