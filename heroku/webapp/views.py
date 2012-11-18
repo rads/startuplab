@@ -226,7 +226,6 @@ def newbid(request):
         return {}
 
     elif request.method == 'POST':
-        print 'yep'
         raw_tags = request.POST.get('tags', '')
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))
         
@@ -234,13 +233,13 @@ def newbid(request):
         bid.owner = request.user
         
         def fail(name, msg):
-            return {'success': False, 'errors': { 'name': name, 'msg': msg}}
+            return JsonResponse({'success': False, 'error': { 'name': name, 'msg': msg}})
 
         ## Begin data verification
         #TODO more error checking!
         amount = request.POST.get('initialOffer', '-1')
         if not amount.isdigit():
-            return fail('amount', "Invalid  amount") 
+            return fail('initialOffer', "Invalid  amount") 
 
         bid.initialOffer = amount
         bid.title = request.POST.get('title')
@@ -255,9 +254,6 @@ def newbid(request):
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))   
            
 
-        if len(errors) > 0:
-            return JsonResponse({'success': False, 'errors': errors})
-        
         ## End data verification
 
 
@@ -274,11 +270,15 @@ def newbid(request):
         bid.tags = tagModels
         bid.save()
 
-        return JsonResponse({'redirect': '/questions/' + str(bid.id)})
+        return JsonResponse({'success': True, 'redirect': '/questions/' + str(bid.id)})
 
 @csrf_exempt
 def querybids(request):
     
+    if request.GET.get('ownerID'):
+        bids = models.Bid.objects.filter(ownerID=request.GET.get('ownerID'))
+        return JsonResponse(map(simplify, bids)) 
+
     # Applies the various filters to a query
     def filtrate(obj):
         return obj
@@ -337,10 +337,13 @@ def profile(request, username=''):
     """ Show a user's profile. If the profile is the profile of whoever is logged
         in, allow the user to POST and edit fields. 
         Returns full page for GET and JSON {success, error} object for POST"""
-        
+    
     # the user that is logged in
     session_user = request.user
-    profile_user = get_object_or_404(User, username=username)
+    if username == '':
+        profile_user = session_user
+    else:
+        profile_user = get_object_or_404(User, username=username)
 
     # Note: The view passes the whole profile to the template engine, which contains
     # stuff that may not need to be visible to people who are not viewing their own 
@@ -485,8 +488,11 @@ def credit_test(request):
 # just a helper function, read the others to understand why we use it
 def _single_interaction_dict(bidID, userID):
     """ Populates a dictionary with all the information from a single interaction """
-    interaction = models.BidInteraction.objects.get(parentBid=models.Bid.objects.get(id=bidID), owner=User.objects.get(id=userID))
+    bid = models.Bid.objects.get(id=bidID)
+    owner = User.objects.get(id=userID)
+    interaction = models.BidInteraction.objects.get_or_create(parentBid=bid, owner=owner)
     messages = models.InteractionMessage.objects.filter(interaction=interaction)
+
     message_list = []
     
     for message in messages:
@@ -502,30 +508,26 @@ def _single_interaction_dict(bidID, userID):
 
     return interaction_dict
 
-
-def single_bid_page(request, bidID):
+@login_required
+@render_to('ownbid.html')
+def single_bid(request, bidID):
     """ 
     Hit from /questions/<bidID>
     If the user is the owner, display the question
     and links to all interactions. If the user is not the owner, redirect to 
     /question/<bidID>/<userID>    (userID for logged in user)
     """
-    
-        # This is just pseudocode, do not assume any of it works!
 
-    if True: # is the logged in user the owner of this bid?
-        interaction1 = _single_interaction_dict(bidID, request.user)
-        # etc
-
+    bid = models.Bid.objects.get(id=bidID)
+    if bid.owner.id == request.user.id:
+        # andrey's db stuff: list of interactions
         content_dict = {
-            'interactions': [interaction1],
-        }       
+            'interactions': [],
+        }
+        return content_dict 
 
     else:
-        pass #redirect to single_interaction_page for this interaction
-
-    
-    return JsonResponse(content_dict)
+        return redirect('/questions/' + str(bidID) + '/' + str(request.user.id))
 
 
 def direct_add_message(request):
@@ -548,7 +550,7 @@ def close_transaction(request):
 
 @login_required
 @render_to('interaction.html')
-def single_interaction(request, bidID, userID):
+def single_interaction(request, bidID, responderID):
     """
     Hit from /questions/<bidID>/<userID>
     This shows the interaction between the bid owner and user from url.
@@ -556,10 +558,26 @@ def single_interaction(request, bidID, userID):
     the bid yet.
     """
 
+    bid = models.Bid.objects.get(id=bidID)
+    
+    #OH GOD WHAT IS THIS
+    if request.user.id == bid.owner.id:
+        if request.user.id == responderID:
+            return single_bid(request, bidID)
+        if models.BidInteraction.objects.filter(owner__id=responderID, parentBid=bid).count() == 0:
+            return single_bid(request, bidID)
+        else:
+            pass # content dict
 
+    else:
+        if request.user.id == responderID:
+            pass # content dict
+        else:
+            pass # content dict
+
+    content_dict = _single_interaction_dict(bidID, responderID)
+    
     if request.GET.get('type', '') == 'json':
-        return JsonResponse(_single_interaction_dict(bidID, userID))
-
-    content_dict = { 'bidID': bidID }    
+        return JsonResponse(content_dict)
 
     return content_dict

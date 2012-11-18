@@ -11,6 +11,7 @@ var BidView = Backbone.View.extend({
     model: BidModel,
     initialize: function () {
         this.render();
+
     },
     render: function () {
         var vars = { 
@@ -23,8 +24,9 @@ var BidView = Backbone.View.extend({
             amount: this.model.get('amount'),
         };
         var template = _.template($('#bid_template').html(), vars);
-        this.$el.html(template) 
+        this.$el.html(template);
     },
+
 });
 
 

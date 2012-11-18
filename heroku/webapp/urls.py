@@ -20,8 +20,8 @@ urlpatterns = patterns('',
     (r'^querybids/$', views.querybids),
     (r'^alltags/$', views.alltags),
 
-    #(r'^questions/(?P<bidID>\d*)/$', views.single_bid),
-    (r'^questions/(?P<bidID>\d*)/(?P<userID>\d*)$', views.single_interaction),
+    (r'^questions/(?P<bidID>\d*)$', views.single_bid),
+    (r'^questions/(?P<bidID>\d*)/(?P<responderID>\d*)$', views.single_interaction),
     
 )
 

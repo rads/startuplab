@@ -1,0 +1,18 @@
+<script type="text/template" id="bid_template">
+    <div class="post <%= color %>">
+        <div class="info <%= color %> small">
+            <img src="/static/credit.png" class="user" />
+            <div class="credits">
+                <%= amount %> Credits
+            </div>
+        </div>
+        <div class="small classlabel"> <%= title %> </div>
+        <%= description %>
+
+        <div class="time"><%= expire_time_text %></div>
+    </div>
+    <div class="small tags <%= color %>">
+        <%= tagstring %>
+    </div>
+</script>
+

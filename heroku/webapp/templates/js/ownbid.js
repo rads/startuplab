@@ -23,19 +23,7 @@ $(function() {
         type: 'json',
     });
 
-    refreshWithQuery();
-    
-    $('#searchtags').change(function(event) {
-        if ($('#searchtags').val() == '') {
-            refreshWithQuery();
-        } else {
-            var tags = $('#searchtags').val().split(',');
-            refreshWithQuery({
-                tags: tags
-            });
-        }
-    });
-    
+    refreshWithQuery({ 'ownerID': 'SHIT'});
 });
 
 

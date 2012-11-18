@@ -3,12 +3,14 @@
 {% block title %}Conversation with {{ "TODO" }}{% endblock %} 
 
 {% block styles %}
+    
     <link href="/static/interaction.css" rel="stylesheet" type="text/css">
     <link href="/static/feed.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block scripts %}
     <script src="/static/bid.js"></script>
+    <script src="/static/bidresults.js"></script>
     <script src="/static/interaction.js"></script>
     <div id="bidID" data-id="{{ bidID }}" class="hidden"></div>
 {% endblock %}

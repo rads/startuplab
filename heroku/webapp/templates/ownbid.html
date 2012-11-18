@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Question Feed{% endblock %}
+
+{% block styles %}
+    <link href="/static/feed.css" rel="stylesheet" type="text/css">
+    <link href="/static/filters.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/bidresults.js"></script>
+    <script src="/static/feed.js"></script>
+    <script src="/static/bid.js"></script>
+    
+{% endblock %}
+
+{% block content %}
+<div id="search">
+    <form action="" method="post">
+        <input class="searchbar" id="searchtags" type="text" placeholder="Search for tags.."/>
+    </form>
+
+</div>
+
+<script type="text/template" id="bid_template">
+    <div class="post <%= color %>">
+        <div class="info <%= color %> small">
+            <img src="/static/credit.png" class="user" />
+            <div class="credits">
+                <%= amount %> Credits
+            </div>
+        </div>
+        <div class="small classlabel"> <%= title %> </div>
+        <%= description %>
+
+        <div class="time"><%= expire_time_text %></div>
+    </div>
+    <div class="small tags <%= color %>">
+        <%= tagstring %>
+    </div>
+</script>
+  
+<div id="feed">
+    
+</div>
+
+{% endblock %}
