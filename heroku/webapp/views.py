@@ -479,18 +479,8 @@ def credit_test(request):
     return HttpResponse(res)
 
 
-
-
-
-#TODO(andrey)  start of your new assignment
-
-
-# just a helper function, read the others to understand why we use it
-def _single_interaction_dict(bidID, userID):
+def _single_interaction_dict(interaction):
     """ Populates a dictionary with all the information from a single interaction """
-    bid = models.Bid.objects.get(id=bidID)
-    owner = User.objects.get(id=userID)
-    interaction = models.BidInteraction.objects.get_or_create(parentBid=bid, owner=owner)
     messages = models.InteractionMessage.objects.filter(interaction=interaction)
 
     message_list = []
@@ -514,31 +504,66 @@ def single_bid(request, bidID):
     """ 
     Hit from /questions/<bidID>
     If the user is the owner, display the question
-    and links to all interactions. If the user is not the owner, redirect to 
+    and links to all interactions. If the user is not the owner, redirects to 
     /question/<bidID>/<userID>    (userID for logged in user)
     """
-
     bid = models.Bid.objects.get(id=bidID)
-    if bid.owner.id == request.user.id:
-        # andrey's db stuff: list of interactions
-        content_dict = {
-            'interactions': [],
-        }
-        return content_dict 
+    interactions = models.BidInteraction.objects.filter(parentBid = bid)
 
+    interactionDictList = []
+
+    if (request.user == bid.owner):
+        for interaction in interactions:
+            interactionDictList.append(_single_interaction_dict(interaction))
+            
+        content_dict = {
+            'interactions': interactionDictList,
+        }
+        return content_dict       
     else:
         return redirect('/questions/' + str(bidID) + '/' + str(request.user.id))
 
+    
+    return JsonResponse(content_dict)
 
-def direct_add_message(request):
+def single_interaction_page(request, bidID, userID):
+    """
+    Hit from /questions/<bidID>/<userID>
+    This shows the interaction between the bid owner and user from url.
+    This creates an interaction for this user if the user has not interacted with
+    the bid yet.
+    """
+    
+    bid = models.Bid.objects.get(id=bidID)
+    
+    try:
+        interaction = models.BidInteraction.objects.get(parentBid = bid, owner = User.objects.get(id = userID))
+        
+    except Exception, e:
+        interaction = models.BidInteraction()
+        interaction.parentBid = bid
+        interaction.owner = request.user
+    
+        
+    content_dict = _single_interaction_dict(interaction)
+    
+
+def direct_add_message(request, interactionID):
     """
     Can be hit from anywhere a bid can be responded to (feed page, bid pages).
     If the user is not the owner, make sure an interaction exists and then add the message.
     """
     
-    message = request.POST.get('message')
-    # save it
+    interaction = models.BidInteraction.objects.get(id=interactionID)
+    message = models.InteractionMessage()
+    message.interaction = interaction    
+    message.text = request.POST.get('message')
+    message.timestamp = datetime.now()
+    message.owner = request.user
     
+    message.save()
+    
+    #TODO(andrey) redirect to a good success page
     return JsonResponse("success")
     
 def close_transaction(request):
@@ -575,7 +600,8 @@ def single_interaction(request, bidID, responderID):
         else:
             pass # content dict
 
-    content_dict = _single_interaction_dict(bidID, responderID)
+    interaction = models.BidInteraction.objects.get(parentBid=bid, owner__id=responderID)
+    content_dict = _single_interaction_dict(interaction)
     
     if request.GET.get('type', '') == 'json':
         return JsonResponse(content_dict)
