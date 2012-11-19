@@ -52,7 +52,6 @@ function refreshWithQuery(args) {
                     pk: djbid.pk, 
                     tags: djbid.tags,
                     text: djbid.text,
-
                 });
                 resultsview.add(model);
             });
