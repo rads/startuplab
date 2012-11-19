@@ -1,4 +1,4 @@
-var colors = ['orange', 'blue', 'grey', 'purple'];
+var colors = ['orange', 'blue', 'grey', 'purple', 'green'];
 var BidModel = Backbone.Model.extend({
     
 });
@@ -20,7 +20,7 @@ var BidView = Backbone.View.extend({
             description: this.model.get('description'),
             tagstring: this.model.get('tags').join(', '),
             expire_time_text: this.model.get('expiretime'),
-            color: colors[Math.floor(Math.random()*4)],
+            color: colors[Math.floor(Math.random()*5)],
             amount: this.model.get('amount'),
         };
         var template = _.template($('#bid_template').html(), vars);

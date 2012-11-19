@@ -491,7 +491,7 @@ def _single_interaction_dict(interaction):
 
     interaction_dict = {
         'responder_id': interaction.owner.id,
-        'messages': sorted(message_list, key=lambda n: n['timestamp']),
+        'messages': reverse(sorted(message_list, key=lambda n: n['timestamp'])),
     }
 
     return interaction_dict

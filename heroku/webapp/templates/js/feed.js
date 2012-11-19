@@ -8,10 +8,13 @@ function set_up_select(tags) {
         width: '100%',
         
     });
-    $('#searchtags').select2("data", {
-        id: '251',
-        text: '251',
-    });
+    var tags = ["15-251", "15-122", "15-210", "21-300", "15-2xx"];
+    $('#searchtags').select2("data", _(tags).map(function (el) {
+        return {
+            id: el,
+            text: el,
+        };
+    }));
 }
 
 $(function() {

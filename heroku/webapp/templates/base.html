@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO:NAME | {% block title %} {% endblock %}</title>
+        <title>CMU Questions | {% block title %} {% endblock %}</title>
       
         <!-- CDN js -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js" type="text/javascript"></script>
@@ -33,17 +33,25 @@
             <div class ="nav">
                 <div class="links">
                     {% if user.is_authenticated %}
+                    <li class="links leftmost"><a href="#">Home</a></li>
                     <li class="links leftmost"><a href="/feed">Feed</a></li>
                     <li class="links leftmost"><a href="/post">New Question</a></li>
                     {% endif %}
 
                         {% if user.is_authenticated %}
                             <li class="links signin">
-                                <a href="/signout">{{ user.username }} | Sign out</a>
+                                <a href="/signout">Sign out</a>
                             </li>
+                            <li class="links signin">
+                                <a href="/user/{{ user.username }}">{{ user.username }}</a>
+                            </li>
+
                         {% else %}
                             <li class="links signin">
-                                <a href="/signin">Sign In | Register</a>
+                                <a href="/signin">Sign In</a>
+                            </li>
+                            <li class="links signin">
+                                <a href="/signup">Register</a>
                             </li>
                         {% endif %}
 
