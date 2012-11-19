@@ -41,7 +41,7 @@ class BidInteraction(models.Model):
     owner = models.ForeignKey(User)
     
     def __unicode__(self):
-        return str(self.owner) + " responding to bid [" + str(self.bid) + "]";
+        return str(self.owner) + " responding to bid [" + str(self.parentBid) + "]";
     
 class InteractionMessage(models.Model):
     interaction = models.ForeignKey(BidInteraction) 

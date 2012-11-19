@@ -1,5 +1,22 @@
 {% extends "base.html" %}
 
+{% block title %}
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="/static/index.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block styles %}
+    <link href="/static/select2.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-stuff
+<div id="search">
+    <form action="/profile" method="post">
+        {% csrf_token %}
+        <input class="searchbar" id="searchtags" type="text" placeholder="Search for tags.."/>
+    </form>
+</div>
 {% endblock %}

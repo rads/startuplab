@@ -276,7 +276,7 @@ def newbid(request):
 def querybids(request):
     
     if request.GET.get('ownerID'):
-        bids = models.Bid.objects.filter(ownerID=request.GET.get('ownerID'))
+        bids = models.Bid.objects.filter(id=request.GET.get('ownerID'))
         return JsonResponse(map(simplify, bids)) 
 
     # Applies the various filters to a query
@@ -287,7 +287,7 @@ def querybids(request):
 
     if request.GET.get('bidID'):
         bid = models.Bid.objects.get(id=request.GET.get('bidID'))
-        return JsonResponse(simplify(bid))
+        return JsonResponse([simplify(bid)])
 
     # for now this is a sane default. Eventually server should set a hard 
     # max on how many it gets from the DB
@@ -320,7 +320,6 @@ def querybids(request):
     return JsonResponse(map(simplify, data))
 
 
-
 @csrf_exempt
 def alltags(request):
     #TODO make this only get tags that have bids
@@ -329,7 +328,7 @@ def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
-    
+@csrf_exempt 
 @login_required
 @render_to('profile.html')
 def profile(request, username=''):
@@ -486,7 +485,7 @@ def _single_interaction_dict(interaction):
     
     for message in messages:
         message_dict = {'owner_name': message.owner.username,
-                        'text': message.text,                        
+                        'text': message.text,
                         'timestamp': str(message.timestamp)}
         message_list.append(message_dict)
 
@@ -496,6 +495,7 @@ def _single_interaction_dict(interaction):
     }
 
     return interaction_dict
+
 
 @login_required
 @render_to('ownbid.html')
@@ -507,7 +507,7 @@ def single_bid(request, bidID):
     /question/<bidID>/<userID>    (userID for logged in user)
     """
     bid = models.Bid.objects.get(id=bidID)
-    interactions = models.BidInteraction.objects.filter(parentBid = bid)
+    interactions = models.BidInteraction.objects.filter(parentBid=bid)
 
     interactionDictList = []
 
@@ -517,35 +517,16 @@ def single_bid(request, bidID):
             
         content_dict = {
             'interactions': interactionDictList,
+            'bidID': bidID,
         }
-        return content_dict       
+        return content_dict
+
     else:
         return redirect('/questions/' + str(bidID) + '/' + str(request.user.id))
 
     
     return JsonResponse(content_dict)
 
-def single_interaction_page(request, bidID, userID):
-    """
-    Hit from /questions/<bidID>/<userID>
-    This shows the interaction between the bid owner and user from url.
-    This creates an interaction for this user if the user has not interacted with
-    the bid yet.
-    """
-    
-    bid = models.Bid.objects.get(id=bidID)
-    
-    try:
-        interaction = models.BidInteraction.objects.get(parentBid = bid, owner = User.objects.get(id = userID))
-        
-    except Exception, e:
-        interaction = models.BidInteraction()
-        interaction.parentBid = bid
-        interaction.owner = request.user
-    
-        
-    content_dict = _single_interaction_dict(interaction)
-    
 
 def direct_add_message(request, interactionID):
     """
@@ -584,12 +565,12 @@ def single_interaction(request, bidID, responderID):
 
     bid = models.Bid.objects.get(id=bidID)
     
-    #OH GOD WHAT IS THIS
+    #OH GOD WHAT IS THIS TODO(nikolai) fix it
     if request.user.id == bid.owner.id:
         if request.user.id == responderID:
             return redirect('/questions/' + str(bidID)) # single_bid(request, bidID)
         if models.BidInteraction.objects.filter(owner__id=responderID, parentBid=bid).count() == 0:
-            return single_bid(request, bidID)
+            return redirect('/questions/' + str(bidID))  #(request, bidID)
         else:
             pass # content dict
 
@@ -599,7 +580,8 @@ def single_interaction(request, bidID, responderID):
         else:
             pass # content dict
 
-    interaction = models.BidInteraction.objects.get(parentBid=bid, owner__id=responderID)
+    tup = models.BidInteraction.objects.get_or_create(parentBid=bid, owner = User.objects.get(id=responderID))
+    interaction = tup[0]
     content_dict = _single_interaction_dict(interaction)
     
     if request.GET.get('type', '') == 'json':

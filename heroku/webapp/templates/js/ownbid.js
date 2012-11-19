@@ -23,7 +23,7 @@ $(function() {
         type: 'json',
     });
 
-    refreshWithQuery({ 'ownerID': 'SHIT'});
+    refreshWithQuery({ 'bidID': $('#bidID').attr('data-id') });
 });
 
 

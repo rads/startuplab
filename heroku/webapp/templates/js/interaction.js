@@ -19,7 +19,7 @@ var InteractionView = Backbone.View.extend({
 
 function render_bid(data) {
     var bidview = new BidView({
-        model: new BidModel(data),
+        model: new BidModel(data[0]),
         el: $('#bid'),
     });
     bidview.render();
@@ -31,7 +31,7 @@ function render_interaction(data) {
 
 $(function () {
     $.ajax({
-        url: '/querybids',
+        url: '/querybids/',
         data:  {
             'bidID': $('#bidID').data('id'),
         },

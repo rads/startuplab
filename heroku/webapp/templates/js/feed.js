@@ -6,6 +6,11 @@ function set_up_select(tags) {
         tokenSeparators: [',', ';'],
         tags: _(tags).map(function(tag) {return {'id': tag, 'text': tag};}),
         width: '100%',
+        
+    });
+    $('#searchtags').select2("data", {
+        id: '251',
+        text: '251',
     });
 }
 
