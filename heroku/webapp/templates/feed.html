@@ -8,14 +8,30 @@
 {% endblock %}
 
 {% block scripts %}
-    <link href="/static/bid_template.tmpl" rel="template" id="bid_template"></script>
     <script src="/static/bid.js" type="text/javascript"></script>
     <script src="/static/bidresults.js" type="text/javascript"></script>
     <script src="/static/feed.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
+<script type="text/template" id="bid_template">
+    <div class="post <%= color %>">
+        <div class="info <%= color %> small">
+            <img src="/static/credit.png" class="user" />
+            <div class="credits">
+                <%= amount %> Credits
+            </div>
+        </div>
+        <div class="small classlabel"> <%= title %> </div>
+        <%= description %>
 
+        <div class="time"><%= expire_time_text %></div>
+    </div>
+    <div class="small tags <%= color %>">
+        <%= tagstring %>
+    </div>
+</script>
+ 
 <div id="search">
     <form action="" method="post">
         <input class="searchbar" id="searchtags" type="text" placeholder="Search for tags.."/>

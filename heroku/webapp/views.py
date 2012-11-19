@@ -287,7 +287,6 @@ def querybids(request):
 
     if request.GET.get('bidID'):
         bid = models.Bid.objects.get(id=request.GET.get('bidID'))
-        print bid
         return JsonResponse(simplify(bid))
 
     # for now this is a sane default. Eventually server should set a hard 
@@ -317,7 +316,7 @@ def querybids(request):
             print "THIS CODE PATH HURTS MAKE IT STOP ='["
 
     #TODO add keyword search
-
+    print data
     return JsonResponse(map(simplify, data))
 
 
@@ -588,7 +587,7 @@ def single_interaction(request, bidID, responderID):
     #OH GOD WHAT IS THIS
     if request.user.id == bid.owner.id:
         if request.user.id == responderID:
-            return single_bid(request, bidID)
+            return redirect('/questions/' + str(bidID)) # single_bid(request, bidID)
         if models.BidInteraction.objects.filter(owner__id=responderID, parentBid=bid).count() == 0:
             return single_bid(request, bidID)
         else:

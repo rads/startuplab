@@ -37,7 +37,7 @@ function refreshWithQuery(args) {
     resultsview.bidviews = [];
     resultsview.$el.html("Loading...");
     $.ajax({
-        url: '/querybids',
+        url: '/querybids/',
         method: 'GET',
         data: args,
         success: function(django_models) {

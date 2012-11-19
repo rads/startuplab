@@ -10,18 +10,18 @@ urlpatterns = patterns('',
     (r'^/$', views.index),
     (r'^index/$', views.index),
 
-    (r'^user/(?P<username>.*)$', views.profile),
+    (r'^user/(?P<username>.*)/$', views.profile),
     (r'^signup/$', views.signup),
     (r'^signin/$', views.signin),
     (r'^signout/$', views.signout),
 
-    (r'^feed/$', views.feed),
+    (r'^feed/?$', views.feed),
     (r'^post/$', views.newbid),
     (r'^querybids/$', views.querybids),
     (r'^alltags/$', views.alltags),
     
     (r'^questions/(?P<bidID>\d*)$', views.single_bid),
-    (r'^questions/(?P<bidID>\d*)/(?P<responderID>\d*)$', views.single_interaction),
+    (r'^questions/(?P<bidID>\d*)/(?P<responderID>\d*)/$', views.single_interaction),
     
 )
 
