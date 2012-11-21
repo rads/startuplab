@@ -18,6 +18,8 @@ class Bid(models.Model):
     expiretime = models.DateTimeField() # By when does the user need this request filled?
     posttime = models.DateTimeField(auto_now_add=True)
 
+    active = models.BooleanField(default=True)
+
     def __unicode__(self):
         return str(self.owner) + ': "' + self.title + '"';
 

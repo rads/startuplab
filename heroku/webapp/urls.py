@@ -1,7 +1,10 @@
 from django.conf.urls import patterns, include, url
 import webapp.views as views
+import webapp.credits as credits
+
 from webapp.settings import DEBUG
 from django.contrib import admin
+
 admin.autodiscover()
 
 # Custom Routes
@@ -27,7 +30,7 @@ urlpatterns = patterns('',
 
 if DEBUG:
     urlpatterns += patterns('',
-        (r'^credit/$', views.credit_test),
+        (r'^credit/$', credits.credit_test),
     )
 
 # Admin
