@@ -15,6 +15,9 @@ from webapp import models
 from django.views.decorators.csrf import csrf_exempt
 from webapp.helpers import JsonResponse
 
+log_info = logging.getLogger('file_info')
+log_error = logging.getLogger('django.request')
+
 def record_transaction(from_username, to_username, amount, timestamp, bid=None):
     """ Just records the transaction. Assumes caller is handling correctness / locking. """
     #TODO logger thing
@@ -27,6 +30,8 @@ def record_transaction(from_username, to_username, amount, timestamp, bid=None):
     )
     trans.save()
     
+    log_info.info('Recorded new transaction from ' + from_username + ' to ' + to_username + ' for ' + amount + ' at ' + timestamp)
+    
 
 @transaction.commit_on_success
 def try_transact_funds(from_username, to_username, amount, bid=None):
@@ -35,8 +40,7 @@ def try_transact_funds(from_username, to_username, amount, bid=None):
         from_prof = User.objects.get(username=from_username).profile
         to_prof = User.objects.get(username=to_username).profile
     except User.DoesNotExist:
-        print "uh oh"
-        #TODO logger
+        log_error.error("Tried to transact funds with non-existing user")
 
     try:
         _lock_dat_shit(from_prof, 'credits')

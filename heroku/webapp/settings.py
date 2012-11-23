@@ -6,7 +6,8 @@ DEBUG = bool(os.environ.get('ISDEVENV', False))
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Nikolai Mushegian', 'nikolai.mushegian+logging@gmail.com')
+    ('Nikolai Mushegian', 'nikolai.mushegian+logging@gmail.com'),
+    ('Andrey Kostov', 'kostov.andrey@gmail.com')
 )
 
 MANAGERS = ADMINS
@@ -149,18 +150,37 @@ LOGGING = {
             '()': 'django.utils.log.RequireDebugFalse'
         }
     },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },     
     'handlers': {
+        #TODO this does not support multiple processes, figure out how to incorporate ConcurrentLogHandler from PyPi
+        'file_info_writer': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': os.path.join(PROJECT_ROOT, 'log', 'general_info.log')
+        },
         'mail_admins': {
             'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
+            'class': 'django.utils.log.AdminEmailHandler',
         }
     },
     'loggers': {
+        'file_info': {
+            'handlers': ['file_info_writer'],
+            'level': 'INFO',
+            'propagate': False,
+        },  
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
-            'propagate': True,
+            'propagate': False,
         },
     }
 }

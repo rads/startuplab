@@ -12,6 +12,10 @@ from django.views.decorators.csrf import csrf_exempt
 from webapp.credits import record_transaction, try_transact_funds
 from webapp.helpers import JsonResponse, render_to, simplify, _lock_dat_shit 
 
+import logging
+
+log_info = logging.getLogger('file_info')
+log_error = logging.getLogger('django.request')
 
 @render_to('index.html')
 def index(request):
@@ -26,7 +30,7 @@ def signup(request):
             data = form.cleaned_data
 
             user = User.objects.create_user(data['username'], data['email'], data['pass1'])
-            #TODO catch if this fails and don't try to log the user in
+            #TODO catch if this fails and don't try to log the user in (and log successful creation of user if successful)
 
             login(request, authenticate(username=data['username'], password=data['pass1']))
             return redirect(index)
@@ -99,7 +103,7 @@ def add_message(request):
         return JsonResponse({'success': True})
     
     except Exception, e:
-        #TODO log
+        log_error.error('Two bids with id ' + bidID)
         return JsonResponse({'success': False, 'msg': "Something went wrong"})
 
 
@@ -188,12 +192,13 @@ def newbid(request):
         bid.save()        
         bid.tags = tagModels
         bid.save()
+        
+        log_info.info("Succesfully created new bid with id " + bid.id)
 
         return JsonResponse({'success': True, 'redirect': '/questions/' + str(bid.id)})
 
 @csrf_exempt
 def querybids(request):
-    
     if request.GET.get('ownerID'):
         bids = models.Bid.objects.filter(id=request.GET.get('ownerID'))
         return JsonResponse(map(simplify, bids)) 
@@ -231,9 +236,7 @@ def querybids(request):
             newTag = models.Tag.objects.get(name=tag)
             data = data | (filtrate(newTag.bid_set.all()))
         except Exception, e:
-            print e 
-            #TODO log(e)
-            print "THIS CODE PATH HURTS MAKE IT STOP ='["
+            log_error.error("There is more than one tag with the name " + tag)
 
     #TODO add keyword search
     print data
