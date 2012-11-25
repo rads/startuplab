@@ -7,7 +7,7 @@ var InteractionView = Backbone.View.extend({
     model: Interaction,
 
     initialize: function () {
-    
+        this.$el.html()    
     },
 
     render: function () {
@@ -26,7 +26,7 @@ function render_bid(data) {
 }
 
 function render_interaction(data) {
-
+    
 }
 
 $(function () {

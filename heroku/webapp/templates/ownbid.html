@@ -9,22 +9,15 @@
 
 {% block scripts %}
     <script src="/static/bidresults.js"></script>
-    <script src="/static/feed.js"></script>
     <script src="/static/bid.js"></script>
     <script src="/static/ownbid.js"></script>
     <div id="bidID" data-id="{{ bidID }}" class="hidden"></div>
 {% endblock %}
 
 {% block content %}
-<div id="search">
-    <form action="" method="post">
-        <input class="searchbar" id="searchtags" type="text" placeholder="Search for tags.."/>
-    </form>
-
-</div>
 
 <script type="text/template" id="bid_template">
-    <div class="post <%= color %>">
+    <div id="<%= id %>" class="post <%= color %>">
         <div class="info <%= color %> small">
             <img src="/static/credit.png" class="user" />
             <div class="credits">
@@ -40,9 +33,12 @@
         <%= tagstring %>
     </div>
 </script>
-  
+Your question: </br> 
 <div id="feed">
     
+<div id="interaction">
+
 </div>
+
 
 {% endblock %}

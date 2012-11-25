@@ -14,6 +14,8 @@ from django.contrib.auth.models import User
 from webapp import models
 from django.views.decorators.csrf import csrf_exempt
 from webapp.helpers import JsonResponse
+import logging
+
 
 log_info = logging.getLogger('file_info')
 log_error = logging.getLogger('django.request')

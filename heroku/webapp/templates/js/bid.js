@@ -4,7 +4,7 @@ var BidModel = Backbone.Model.extend({
 });
 
 var BidResults = Backbone.Collection.extend({
-    model: BidModel         
+    model: BidModel
 });
 
 var BidView = Backbone.View.extend({
@@ -25,6 +25,7 @@ var BidView = Backbone.View.extend({
         };
         var template = _.template($('#bid_template').html(), vars);
         this.$el.html(template);
+        
     },
 
 });

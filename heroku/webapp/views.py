@@ -193,7 +193,7 @@ def newbid(request):
         bid.tags = tagModels
         bid.save()
         
-        log_info.info("Succesfully created new bid with id " + bid.id)
+        log_info.info("Succesfully created new bid with id " + str(bid.id))
 
         return JsonResponse({'success': True, 'redirect': '/questions/' + str(bid.id)})
 
@@ -319,7 +319,7 @@ def _single_interaction_dict(interaction):
 
     interaction_dict = {
         'responder_id': interaction.owner.id,
-        'messages': reverse(sorted(message_list, key=lambda n: n['timestamp'])),
+        'messages': sorted(message_list, key=lambda n: n['timestamp']).reverse(),
     }
 
     return interaction_dict
