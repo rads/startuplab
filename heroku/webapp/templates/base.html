@@ -33,18 +33,15 @@
             <div class ="nav">
                 <div class="links">
                     {% if user.is_authenticated %}
-                    <li class="links leftmost"><a href="/">Home</a></li>
-                    <li class="links leftmost"><a href="/feed">Feed</a></li>
-                    <li class="links leftmost"><a href="/post">New Question</a></li>
-                    {% endif %}
+                        <li class="links title"><a href="/">Help Swap</a></li>
+                        
+                        
+                        <li class="links signin"><a href="/signout">Sign out</a></li>
+                        <li class="links leftmost"><a href="/feed">Feed</a></li>
+                        <li class="links signin"><a href="/user/{{ user.username }}">Profile: {{ user.username }}</a></li>
+                        
+                        <li class="links leftmost"><a href="/post">New Question</a></li>
 
-                    {% if user.is_authenticated %}
-                        <li class="links signin">
-                            <a href="/signout">Sign out</a>
-                        </li>
-                        <li class="links signin">
-                            <a href="/user/{{ user.username }}">{{ user.username }}</a>
-                        </li>
 
                     {% else %}
                         <li class="links signin">

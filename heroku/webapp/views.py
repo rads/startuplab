@@ -117,7 +117,6 @@ def closeInteraction(interaction):
     #TODO(andrey) error checking (and logging)
     try_transact_funds(bid.owner, interaction.owner, interaction.offerAmount, bid)
 
-
 def getInteractionsForUser(request):
     """ JSON: Gets bids that this user responded to, as well as all of the messages """ 
     user = request.user
@@ -130,17 +129,25 @@ def getInteractionsForUser(request):
     return { 'bids': bids, 'interactions': interaction_dicts }
 
 
-def getMessagesForBid(request):
-    bidid = request.GET.get('id')
-    bid = models.Bid.objects.get(id=bidid)
-    interactions = models.BidInteraction.objects.filter(parentBid=bid)
-    ret = []
-    for interaction in interactions:
-        messages = models.InteractionMessage.objects.filter(interaction=interaction).order_by('timestamp')
-        map(messages, lambda x: {'name': x.owner.username, 'msg': x.text})
-        ret.push(messages)
+@csrf_exempt
+def getResponsesForBid(request):
+    pass
 
-    return JsonResponse(ret)
+
+@csrf_exempt
+def getMessagesForInteraction(request):
+    interactionID = request.GET.get('id')
+    interaction = models.BidInteraction.objects.get(id=interactionID)
+    
+    interaction_dict = {}
+    
+    messages = list(models.InteractionMessage.objects.filter(interaction=interaction).order_by('timestamp'))
+    messages_dict = map(lambda x: {'name': x.owner.username, 'msg': x.text}, messages)
+    
+    interaction_dict['responder'] = interaction.owner.username
+    interaction_dict['messages'] = messages_dict
+
+    return JsonResponse(interaction_dict)
 
 @login_required
 @render_to('post.html')
@@ -201,6 +208,7 @@ def newbid(request):
 def querybids(request):
     if request.GET.get('ownerID'):
         bids = models.Bid.objects.filter(id=request.GET.get('ownerID'))
+        print "returning"
         return JsonResponse(map(simplify, bids)) 
 
     # Applies the various filters to a query
@@ -239,8 +247,9 @@ def querybids(request):
             log_error.error("There is more than one tag with the name " + tag)
 
     #TODO add keyword search
-    print data
-    return JsonResponse(map(simplify, data))
+    data_list = sorted(list(data), key=lambda x: x.initialOffer)
+    print data_list
+    return JsonResponse(map(simplify, data_list))
 
 
 @csrf_exempt
@@ -275,7 +284,12 @@ def profile(request, username=''):
     
 
     if request.method == 'GET':
-        return { 'profile': profile, 'is_own_profile': is_own_profile }
+        return { 
+            'profile': profile, 
+            'is_own_profile': is_own_profile,
+            'watched_tag_string': "15-1xx, 15-2xx, 21-1xx, 21-2xx, Python, C, C#",
+
+        }
     
     elif request.method == 'POST':
         # A POST is made to this URL every time any field or combinations of fields
@@ -355,13 +369,13 @@ def single_bid(request, bidID):
     
     return JsonResponse(content_dict)
 
-
-def direct_add_message(request, interactionID):
+@csrf_exempt
+def direct_add_message(request):
     """
     Can be hit from anywhere a bid can be responded to (feed page, bid pages).
     If the user is not the owner, make sure an interaction exists and then add the message.
     """
-    
+    interactionID = int(request.POST.get('interactionID'))
     interaction = models.BidInteraction.objects.get(id=interactionID)
     message = models.InteractionMessage()
     message.interaction = interaction    
@@ -372,7 +386,7 @@ def direct_add_message(request, interactionID):
     message.save()
     
     #TODO(andrey) redirect to a good success page
-    return JsonResponse("success")
+    return JsonResponse({ 'success': True, 'name': message.owner.username, 'text': message.text })
     
 
 @login_required
@@ -406,6 +420,10 @@ def single_interaction(request, bidID, responderID):
     interaction = tup[0]
     content_dict = _single_interaction_dict(interaction)
     
+    content_dict['bidID'] = bidID
+    content_dict['interactionID'] = interaction.id
+    content_dict['bid_owner'] = bid.owner.username
+
     if request.GET.get('type', '') == 'json':
         return JsonResponse(content_dict)
 

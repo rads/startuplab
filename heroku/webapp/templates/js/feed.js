@@ -8,7 +8,7 @@ function set_up_select(tags) {
         width: '100%',
         
     });
-    var tags = ["15-251", "15-122", "15-210", "21-300", "15-2xx"];
+    var tags = ["15-1xx", "15-2xx", "21-1xx", "21-2xx", "Python", "C", "C#"];
     $('#searchtags').select2("data", _(tags).map(function (el) {
         return {
             id: el,

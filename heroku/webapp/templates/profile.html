@@ -1,11 +1,41 @@
 {% extends 'base.html' %}
 {% block title %} {{ profile.user.username }}'s Profile{% endblock %}
 
-{% block content %}
-    This is the profile page of {{ profile.user.username }}. <br/>
-    This nigga has {{ profile.credits }} credits. <br/> <br/> 
-    {% if is_own_profile %}
-        this should be visible iff this is the logged in user's profile <br/>
-    {% endif %}
+{% block styles %}
+    <link href="/static/post.css" rel="stylesheet" type="text/css">
+    <link href="/static/feed.css" rel="stylesheet" type="text/css">
+    <link href="/static/profile.css" rel="stylesheet" type="text/css">
+    <link href="/static/select2.css" rel="stylesheet" type="text/css">
+{% endblock %}
 
+
+{% block scripts %}
+    <script src="/static/profile.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="question blue">
+        <div class="photo">
+            <img src="/static/profile_pic.png"></img>
+        </div>
+        {{ profile.user.username }}'s Profile <br/>
+        Credits: {{ profile.credits }} <br/> 
+        Rep: 0 <br/>
+
+        Watched tags:
+    
+        <div class="tags"> 
+            {{ watched_tag_string }}
+        </div>
+   
+    <br/>
+    <br/>
+        {% if is_own_profile %}
+            <div class="right flatbutton">
+                Edit Profile
+            </div>
+            </br>
+        {% endif %}
+
+    </div>
 {% endblock %}

@@ -9,13 +9,14 @@
 
 ## Assumes credits never overflow.
 
+from webapp.helpers import render_to, _lock_dat_shit
 from django.db import transaction
 from django.contrib.auth.models import User
 from webapp import models
 from django.views.decorators.csrf import csrf_exempt
 from webapp.helpers import JsonResponse
 import logging
-
+from datetime import datetime
 
 log_info = logging.getLogger('file_info')
 log_error = logging.getLogger('django.request')
@@ -32,7 +33,7 @@ def record_transaction(from_username, to_username, amount, timestamp, bid=None):
     )
     trans.save()
     
-    log_info.info('Recorded new transaction from ' + from_username + ' to ' + to_username + ' for ' + amount + ' at ' + timestamp)
+    log_info.info('Recorded new transaction from ' + from_username + ' to ' + to_username + ' for ' + str(amount) + ' at ' + str(timestamp))
     
 
 @transaction.commit_on_success
@@ -99,3 +100,6 @@ def credit_test(request):
 
     return JsonResponse(res)
 
+@render_to('credits.html')
+def credit_page(request):
+    return {}

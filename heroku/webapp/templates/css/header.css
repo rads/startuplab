@@ -29,6 +29,13 @@
     padding: 15px;
     margin: -1px 0;
 }
+.title a {
+    font-size: 15px;
+    float: left;
+    border-left: 1px solid #ecedee;
+    border-right: 1px solid #ecedee;
+    outline: 1px solid #cdcfd0;
+}
 .leftmost a {
     float: left;
     border-left: 1px solid #ecedee;

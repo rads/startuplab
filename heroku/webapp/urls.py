@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     (r'^/$', views.index),
     (r'^index/$', views.index),
 
-    (r'^user$', views.profile),
+    (r'^user/(?P<username>.*)$', views.profile),
     (r'^signup/$', views.signup),
     (r'^signin/$', views.signin),
     (r'^signout/$', views.signout),
@@ -25,12 +25,19 @@ urlpatterns = patterns('',
     
     (r'^questions/(?P<bidID>\d*)$', views.single_bid),
     (r'^questions/(?P<bidID>\d*)/(?P<responderID>\d*)/$', views.single_interaction),
-    
+
+    (r'^interactions/$', views.getMessagesForInteraction),    
+
+    (r'^bidpages/$', views.getResponsesForBid),
+
+    (r'^reply$', views.direct_add_message),
+
+    (r'^credit/$', credits.credit_page),
 )
 
 if DEBUG:
     urlpatterns += patterns('',
-        (r'^credit/$', credits.credit_test),
+        (r'^credit_bd/$', credits.credit_test),
     )
 
 # Admin

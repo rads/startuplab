@@ -13,25 +13,21 @@
     <script src="/static/bidresults.js"></script>
     <script src="/static/interaction.js"></script>
     <div id="bidID" data-id="{{ bidID }}" class="hidden"></div>
+    <div id="interactionID" data-id="{{ interactionID }}" class="hidden"></div>
 {% endblock %}
 
-{% block content %}
-
+{% block content %} 
     <div id="bid">Loading...</div>
     <div id="interaction">
-        <div class="message right orange">
-            <div class="info">name</div>
-            blah
-        </div>
-        <div class="message left green">
-            <div class="info">other name</div>
-            blah
-        </div>
-        <div class="message right orange">
-            <div class="info">name</div>
-            blah
-        </div>
+    
     </div>
+
+    <textarea id="response_input" class="large"> </textarea>
+    <button id="respond" class="flatbutton">Respond</button>
+
+    {% if user.username == bid_owner %}
+        <button id="respond" class="flatbutton">Pay bounty</button>
+    {% endif %}
 
     <script type="text/template" id="bid_template">
         <div class="post <%= color %>">
@@ -50,22 +46,15 @@
             <%= tagstring %>
         </div>
     </script>
-     
-    <script id="interaction_template" type="text/template">
-        <div class="interaction">
-            <div class="post">
-                original post 
-            </div>
-            <div class="responses">
-                <%= rendered_messages %>
-            </div>
-        </div>
-    <script>
-
 
     <script id="message_template" type="text/template">
-        <%= message.owner %>
-        <%= message.text %>
+        <div class="message <%= side %> <%= color %>">
+            <div class="info"><%= name %></div>
+            <p>
+            <%= text %>
+            </p>
+        </div>
+
     </script>
 
 {% endblock %}

@@ -1,0 +1,19 @@
+.photo {
+    width: 200px;
+    height: 180px;
+    float: left;
+}
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+#search {
+    font: 12px/12px 'Arial', sans-serif;
+    width: 600px;
+    float: right;
+}
+
+.tags {
+    font: 14px/14px 'Arial', sans-serif;
+}

@@ -4,10 +4,15 @@ startuplab
 Monday Deadline
 ---------------
 
-- question page
+presentation outline:
+
+* general summary
+* walk through flow:
+* wrap up / plans
+
+
+
 * /questions/<questionID> for logged in user (see all interactions)
-* /questions/<questionID> for all other users (jump straight to interaction
-* /questions/<questionID>/<responderID> goes straight to an interaction
 
 - UI shit (mostly steph):
 * fix fonts for tags
@@ -18,9 +23,7 @@ Monday Deadline
 TODO (high priority)
 ----
 * andrey: save new tags from profile view 
-* andrey: design and implement bid interaction API
 * nikolai: superuser deploy hooks & backdoors
-* nikolai: credit transaction system
 * nikolai: static files bullshit
 * nikolai: general select2 helper functions (init/auto-populate)
 * steph: title block in navbar, cross-browser testing

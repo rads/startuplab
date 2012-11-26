@@ -59,3 +59,9 @@ label.error {
     margin-top: 10px;
     color: #888;
 }
+
+.question-tags {
+    font: 14px/14px 'Arial', sans-serif;
+    clear: both;
+}
+

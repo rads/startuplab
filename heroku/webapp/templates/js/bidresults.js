@@ -15,7 +15,6 @@ var BidResultsView = Backbone.View.extend({
             bv.render();
             $(self.$el).append(bv.$el.html());
             $('#q' + bv.model.id).click(function (e) {
-                console.log('ha');
                 window.location = '/questions/' + bv.model.id;
             }); 
         });
