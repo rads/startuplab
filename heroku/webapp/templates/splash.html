@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block styles %}
+    <link href="static/splash.css" rel="stylesheet" type="text/css">
+    <link href="static/feed.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+ 
+{% block content %} 
+    <div id="feed">
+        <div class="pitch green">
+
+            <div class="splash">CMU Help Swap</div>
+
+            Sign up for a beta invite
+
+            <form action="" method="post">
+                <input class="signup" type="text" placeholder="" name="search" value="" />
+            </form>
+            
+            ~
+
+            <div class="screencontainer">
+                <img src="static/screenshot.jpg" alt="" class="screenshot" />
+            </div>
+            Look! Some text here that explains what we're all about and all that jazz.
+
+        </div>
+    </div><!-- close feed -->
+</div><!-- close question -->
+
+{% endblock %}

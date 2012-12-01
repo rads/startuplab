@@ -1,8 +1,9 @@
 from django.conf.urls import patterns, include, url
 import webapp.views as views
 import webapp.credits as credits
+import webapp.settings as settings
 
-from webapp.settings import DEBUG
+from settings import DEBUG
 from django.contrib import admin
 
 admin.autodiscover()
@@ -33,6 +34,10 @@ urlpatterns = patterns('',
     (r'^reply$', views.direct_add_message),
 
     (r'^credit/$', credits.credit_page),
+)
+
+urlpatterns += patterns('',
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT}),
 )
 
 if DEBUG:

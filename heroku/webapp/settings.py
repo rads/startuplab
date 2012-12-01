@@ -13,9 +13,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # sets up DB config for Heroku
-DATABASES = {
-    'default': dj_database_url.config(default='postgres://localhost')
-}
+DATABASES = {}
+DATABASES['default'] = dj_database_url.config(default='postgres://localhost')
 
 if (os.environ.get('ISDEVENV', True)):
     logger = logging.getLogger(__name__)

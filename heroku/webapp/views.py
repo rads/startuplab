@@ -17,7 +17,7 @@ import logging
 log_info = logging.getLogger('file_info')
 log_error = logging.getLogger('django.request')
 
-@render_to('index.html')
+@render_to('splash.html')
 def index(request):
     return {}
 
@@ -131,7 +131,14 @@ def getInteractionsForUser(request):
 
 @csrf_exempt
 def getResponsesForBid(request):
-    pass
+    bid = models.Bid.objects.get(id=int(request.GET.get('bidID')))
+    interactions = models.BidInteraction.objects.filter(parentBid=bid)
+    ret = []
+    for interaction in interactions:
+        d = {'owner': interaction.owner, 'id': interaction.id}
+        ret.append(d)
+
+    return JsonResponse(ret)
 
 
 @csrf_exempt
@@ -170,12 +177,16 @@ def newbid(request):
         amount = request.POST.get('initialOffer', '-1')
         if not amount.isdigit():
             return fail('initialOffer', "Invalid  amount") 
+        if amount < request.user.profile.credits:
+            return fail('initialOffer', "You don't have enough credits!")
 
         bid.initialOffer = amount
         bid.title = request.POST.get('title')
 
         datetime_str = request.POST.get('expiretime')
         bid.expiretime = datetime.strptime(datetime_str, "%m/%d/%Y") 
+        if bid.expiretime < datetime.now():
+            return fail('expiretime', "That date has already passed")
         
         bid.posttime = datetime.now()
         bid.description = request.POST.get('description', '')
@@ -254,9 +265,6 @@ def querybids(request):
 
 @csrf_exempt
 def alltags(request):
-    #TODO make this only get tags that have bids
-    # like if someone added a stupid tag nobody uses through their profile, don't
-    # auto-suggest it for people querying bids
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 

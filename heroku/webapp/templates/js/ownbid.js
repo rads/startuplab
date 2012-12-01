@@ -9,24 +9,21 @@ $(function() {
 });
 
 // The responses
-$(function() {
+(function() {
     $.ajax({
         url: '/interactions',
         data: {
             id: $('#bidID').attr('data-id'),
         },
         success: function (data) {
-            _(data).each(function (interaction) {
-                if (interaction.messages.length == 0) {
-                    return;
-                }
-                if (interaction.responder != interaction.messages[0].message) {
-                    console.log('fuck');
-                }
-                var template = _.template($('#message_template').html(), {
-                    name: interaction.responder,
-                    text: interaction.messages[0].message,
-                       
+            _(data).each(function (info) {
+                var raw_html = _.template($('#response_template').html(), {
+                    name: info.owner,
+                    id: info.id,
+                });
+                $('#interaction').append(raw_html);
+                $('#response' + info.id).click(function() {
+                    window.location = '/questions/' + $('#bidID').attr('data-id') + info.id;
                 });
             });
         },
