@@ -28,7 +28,6 @@ $(function() {
     $.ajax({
         url: '/alltags',
         success: set_up_select,
-        type: 'json',
     });
 
     refreshWithQuery();

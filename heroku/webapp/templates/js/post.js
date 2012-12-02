@@ -20,7 +20,6 @@ $(function () {
         $.ajax({
         url: '/alltags',
         success: set_up_select,
-        type: 'json'
     });
     
     $('#post_form').submit(function (e) {
