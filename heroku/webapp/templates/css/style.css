@@ -31,3 +31,47 @@ img {
     margin: 25px auto;
     width: 830px;
 }
+
+.underline_entry {
+    font: 18px/20px 'RalewayThin', sans-serif;
+    color: #fff;
+    background: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px solid #fff;
+    border-left: none;
+    margin-bottom: 0 5px 5px 0;
+    padding-left: 4px;
+}
+.flatbutton {
+    font: 16px/18px 'RalewayThin', sans-serif;
+    color: #fff;
+    padding: 5px;
+    margin-top: 15px;
+    border: 1px;
+    border-color: #fff;
+    border-style: solid;
+    width: 150px;
+}
+
+.orange {
+    color: #fff;
+    background: #fbb036;
+}
+.grey {
+    color: #fff;
+    background: #66686b;
+}
+.purple {
+    color: #fff;
+    background: #6a3a6a;
+}
+.blue {
+    color: #fff;
+    background: #76cdd3;
+}
+.green {
+    color: #fff;
+    background: #96c34a;
+}
+

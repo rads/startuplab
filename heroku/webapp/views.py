@@ -18,8 +18,14 @@ log_info = logging.getLogger('file_info')
 log_error = logging.getLogger('django.request')
 
 @render_to('splash.html')
+@csrf_exempt
 def index(request):
-    return {}
+    if request.method == 'POST' and request.POST.get('email', '') != '':
+        b = models.BetaEmail(email=request.POST.get('email'))
+        b.save()
+        return { 'complete': True }
+    else:
+        return {}
 
 @render_to('signup.html')
 #TODO refactor to not use django forms

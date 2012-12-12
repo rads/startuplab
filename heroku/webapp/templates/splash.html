@@ -14,21 +14,25 @@
     <div id="feed">
         <div class="pitch green">
 
-            <div class="splash">CMU Help Swap</div>
+            <div class="splash">HelpSwap.net</div>
 
-            Sign up for a beta invite
+            Tap into the collective power of the CMU student body by putting up bounties for academic help.
+            
+            Sign up for a beta invite:
 
             <form action="" method="post">
-                <input class="signup" type="text" placeholder="" name="search" value="" />
+                <input class="email_input" type="text" placeholder="" name="email" />
+                <input type="submit" class="flatbutton gray" />
             </form>
-            
-            ~
-
+            <br/> 
+            {% if complete %}
+                Thanks! You'll get an email when we're ready.
+            {% endif %} 
+ 
             <div class="screencontainer">
                 <img src="static/screenshot.jpg" alt="" class="screenshot" />
             </div>
-            Look! Some text here that explains what we're all about and all that jazz.
-
+           
         </div>
     </div><!-- close feed -->
 </div><!-- close question -->

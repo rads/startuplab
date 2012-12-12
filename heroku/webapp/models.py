@@ -54,6 +54,11 @@ class InteractionMessage(models.Model):
     def __unicode__(self):
         return str(owner) + " said " + str(text)[:30]
 
+class BetaEmail(models.Model):
+    email = models.CharField(max_length=100)
+
+    def __unicode__(self):
+        return str(email)
 
 # additional info about users that is not part of django's auth system
 class UserProfile(models.Model):

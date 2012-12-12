@@ -12,26 +12,6 @@
     width: 405px;
     float: right;
 }
-.orange {
-    color: #fff;
-    background: #fbb036;
-}
-.grey {
-    color: #fff;
-    background: #66686b;
-}
-.purple {
-    color: #fff;
-    background: #6a3a6a;
-}
-.blue {
-    color: #fff;
-    background: #76cdd3;
-}
-.green {
-    color: #fff;
-    background: #96c34a;
-}
 .user {
     padding-right: 5px;
 }

@@ -1,33 +1,33 @@
 .splash {
-font: 64px/70px 'RalewayThin', sans-serif;
-color: #fff;
-text-align: center;
-padding-bottom: 15px;
+    font: 64px/70px 'RalewayThin', sans-serif;
+    color: #fff;
+    text-align: center;
+    padding-bottom: 15px;
 }
 .pitch {
-font: 20px/28px 'RalewayThin', sans-serif;
-color: #fff;
-padding: 20px;
-text-align: center;
-clear: both;
+    font: 20px/28px 'RalewayThin', sans-serif;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+    clear: both;
 }
 .screenshot {
-border: #fff 5px solid;
+    border: #fff 5px solid;
 }
 .screencontainer {
-margin: 0 auto;
-padding: 10px;
-text-align: center;
+    margin: 0 auto;
+    padding: 10px;
+    text-align: center;
 }
-.signup {
-background: #fff;
-font: 14px/16px 'Arial', sans-serif;
-color: #cfd0d2;
-height: 25px;
-padding: 2px 3px 3px 3px;
-width: 505px;
-border-left: 1px solid #e5e6e7;
-border-top: 1px solid #e5e6e7;
-border-right: none;
-border-bottom: 1px solid #e5e6e7;
+.email_input {
+    background: #fff;
+    font: 14px/16px 'Arial', sans-serif;
+    color: #cfd0d2;
+    height: 25px;
+    padding: 2px 3px 3px 3px;
+    width: 400px;
+    border-left: 1px solid #e5e6e7;
+    border-top: 1px solid #e5e6e7;
+    border-right: none;
+    border-bottom: 1px solid #e5e6e7;
 }
