@@ -18,6 +18,8 @@ from webapp.helpers import JsonResponse
 import logging
 from datetime import datetime
 
+import logging
+
 log_info = logging.getLogger('file_info')
 log_error = logging.getLogger('django.request')
 

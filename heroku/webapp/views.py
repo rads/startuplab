@@ -169,9 +169,6 @@ def newbid(request):
         return {}
 
     elif request.method == 'POST':
-        raw_tags = request.POST.get('tags', '')
-        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
-        
         bid = models.Bid()
         bid.owner = request.user
         
@@ -274,6 +271,12 @@ def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
+@csrf_exempt
+@login_required
+def usertags(request):
+    """ Get a list of the tags of the user who made the request. """
+    return JsonResponse(map(lambda x: x.name, list(request.user.profile.tags.all())))
+
 @csrf_exempt 
 @login_required
 @render_to('profile.html')
@@ -298,21 +301,19 @@ def profile(request, username=''):
     
 
     if request.method == 'GET':
+        tags = profile.tags.all()
+        tagstring = ""
+        for tag in tags:
+            tagstring += tag.name + " "
         return { 
             'profile': profile, 
             'is_own_profile': is_own_profile,
-            'watched_tag_string': "15-1xx, 15-2xx, 21-1xx, 21-2xx, Python, C, C#",
+            'watched_tag_string': tagstring,
 
         }
     
     elif request.method == 'POST':
-        # A POST is made to this URL every time any field or combinations of fields
-        # are modified. The client is free to send updates consisting of any combination
-        # of fields. 
-
-
-        ### Go through each field and update as necessary, but do not save the profile
-        ### object to the db until all fields are updated
+        # A POST is made to this URL when the user wants to edit his profile
 
         if request.POST.getlist('tags[]'):
             tag_names = request.POST.getlist('tags[]')
@@ -325,12 +326,29 @@ def profile(request, username=''):
             ## userprofile.tags = tags
             ## userprofile.save()
 
-        # non-array example
-        if request.POST.get('shit'):
-            pass
-            
+        return redirect('/edit_profile/')
+        #return JsonResponse()
 
-        return JsonResponse()
+@login_required
+@render_to('edit_profile.html')
+def edit_profile(request):
+    if request.method == 'GET':
+        return {}
+    
+    elif request.method == 'POST':
+        raw_tags = request.POST.get('tags', 'a')
+        tags = map(lambda x: x.strip(' '), raw_tags.split(','))
+    
+        profile = request.user.profile
+        edited_tags = []
+        for tag in tags:
+            newTag, created = models.Tag.objects.get_or_create(name = tag)
+            edited_tags.append(newTag)
+            
+        profile.tags = edited_tags
+        profile.save()
+        
+        return redirect('/user/')
 
 
 def _single_interaction_dict(interaction):
