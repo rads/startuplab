@@ -265,6 +265,12 @@ def alltags(request):
     """ Get a list of all the tags. Used to populate auto-suggest field thing. """
     return JsonResponse(map(lambda x: x.name, list(models.Tag.objects.all())))
 
+@csrf_exempt
+@login_required
+def usertags(request):
+    """ Get a list of the tags of the user who made the request. """
+    return JsonResponse(map(lambda x: x.name, list(request.user.profile.tags.all())))
+
 @csrf_exempt 
 @login_required
 @render_to('profile.html')
@@ -327,8 +333,7 @@ def edit_profile(request):
         raw_tags = request.POST.get('tags', 'a')
         tags = map(lambda x: x.strip(' '), raw_tags.split(','))
     
-        user = request.user
-        profile = user.profile
+        profile = request.user.profile
         edited_tags = []
         for tag in tags:
             newTag, created = models.Tag.objects.get_or_create(name = tag)
