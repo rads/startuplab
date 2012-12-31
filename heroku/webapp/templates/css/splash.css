@@ -13,6 +13,7 @@
 }
 .screenshot {
     border: #fff 5px solid;
+    width: 500px;
 }
 .screencontainer {
     margin: 0 auto;

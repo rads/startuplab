@@ -1,14 +1,14 @@
 startuplab
 ==========
 
-Monday Deadline
----------------
+new post flow
+respond to questions flow
+markdown
+default tags
+profile edit
+signin/register
 
-presentation outline:
 
-* general summary
-* walk through flow:
-* wrap up / plans
 
 
 
