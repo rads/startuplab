@@ -28,27 +28,32 @@ def index(request):
         return {}
 
 @render_to('signup.html')
-#TODO refactor to not use django forms
 def signup(request):
+    
+    ret = { 'form': forms.SignUpForm() }
     if request.method == 'POST': 
         form = forms.SignUpForm(request.POST)
+        
+
         if form.is_valid():
             data = form.cleaned_data
+            
+            #TODO(andrey) verify these are ok (not already in use)
+            if True: # if valid
+                user = User.objects.create_user(data['username'], data['email'], data['pass1'])
+                login(request, authenticate(username=data['username'], password=data['pass1']))
+                return redirect(index)
 
-            user = User.objects.create_user(data['username'], data['email'], data['pass1'])
-            #TODO catch if this fails and don't try to log the user in (and log successful creation of user if successful)
-
-            login(request, authenticate(username=data['username'], password=data['pass1']))
-            #TODO redirect to better place
-            return redirect(index)
+            else:
+                ret['error'] = "message from checking DB for if name/email exist"
+                return ret
 
         else: #TODO if form is not valid?
-            pass
+            ret['error'] = "message from form validation" 
+            return ret
 
     elif request.method == 'GET':
-        form = forms.SignUpForm()
-    
-    return {'form': form}
+        return ret
 
 @render_to('signin.html')
 def signin(request):
