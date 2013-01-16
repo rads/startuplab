@@ -3,8 +3,8 @@
 {% block title %}Welcome{% endblock %}
 
 {% block styles %}
-    <link href="static/splash.css" rel="stylesheet" type="text/css">
-    <link href="static/feed.css" rel="stylesheet" type="text/css">
+    <link href="/static/splash.css" rel="stylesheet" type="text/css">
+    <link href="/static/feed.css" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block scripts %}
@@ -16,21 +16,10 @@
 
             <div class="splash">HelpSwap.net</div>
 
-            Tap into the collective power of the CMU student body by putting up bounties for academic help.
-            
-            Sign up for a beta invite:
-
-            <form action="" method="post">
-                <input class="email_input" type="text" placeholder="" name="email" />
-                <input type="submit" class="flatbutton gray" />
-            </form>
-            <br/> 
-            {% if complete %}
-                Thanks! You'll get an email when we're ready.
-            {% endif %} 
+            Tap into the collective power of the CMU student body by putting up bounties for academic help.  Register and we'll send you an email when we're ready to go.
  
             <div class="screencontainer">
-                <img src="static/screenshot.png" alt="" class="screenshot" />
+                <img src="/static/screenshot.png" alt="" class="screenshot" />
             </div>
            
         </div>

@@ -1,0 +1,13 @@
+table {
+padding: 0;
+}
+th {
+font: 14px/18px 'Arial' sans-serif;
+font-weight: bold;
+text-align: right;
+padding-right: 10px;
+}
+input.textfield {
+font: 12px/16px 'Arial' sans-serif;
+width: 300px;
+}

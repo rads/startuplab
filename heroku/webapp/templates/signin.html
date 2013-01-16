@@ -2,12 +2,34 @@
 
 {% block title %}Sign In{% endblock %}
 
+{% block styles %}
+    <link href="/static/splash.css" rel="stylesheet" type="text/css">
+    <link href="/static/register.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block content %}
-    <form action="" method="post">
+
+    <form action=""  method="post" class="blue">
         {% csrf_token %}
-        {{ form.as_p }}
+        
+        <table width="500" border="0" align="center" cellpadding="2" cellspacing="0">
+            <tr>
+              <th>Username </th>
+              <td><input name="username" type="text" class="textfield" id="fname" /></td>
+            </tr>
+            <tr>
+              <th>Password </th>
+              <td><input name="password" type="password" class="textfield" id="lname" /></td>
+            </tr>
+            <tr>
+              <td>&nbsp;</td>
+              <td><button class="ask blue" type="submit">Sign in</button></td>
+            </tr>
+        </table>
+
         <input type="hidden" name="next" value="{{ next }}">
-        <input type="submit" value="Sign In">
+        
+        
     </form>
     {% if error %}
         {{ error }}

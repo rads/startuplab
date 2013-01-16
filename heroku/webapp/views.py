@@ -39,6 +39,7 @@ def signup(request):
             #TODO catch if this fails and don't try to log the user in (and log successful creation of user if successful)
 
             login(request, authenticate(username=data['username'], password=data['pass1']))
+            #TODO redirect to better place
             return redirect(index)
 
         else: #TODO if form is not valid?

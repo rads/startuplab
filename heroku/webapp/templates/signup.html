@@ -2,11 +2,43 @@
 
 {% block title %}Sign Up {% endblock %}
 
+{% block styles %}
+    <link href="/static/splash.css" rel="stylesheet" type="text/css">
+    <link href="/static/register.css" rel="stylesheet" type="text/css">
+{% endblock %}
+
 {% block content %}
-    <form action="" method="post">
+
+    
+    <div class="splash green">Register<br /></div>
+    
+    <form id="SignUpForm" name="SignUpForm" method="post" class="green" action="">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Sign Up">
+      <table width="500" border="0" align="center" cellpadding="2" cellspacing="0">
+        <tr>
+          <th width="124">Username</th>
+          <td width="168"><input name="username" type="text" class="textfield" id="login" /></td>
+        </tr>
+        
+        <tr>
+          <th>Email</th>
+          <td><input name="email" type="text" class="textfield" id="password" /></td>
+        </tr>
+
+        <tr>
+          <th>Password</th>
+          <td><input name="pass1" type="password" class="textfield" id="pass1" /></td>
+        </tr>
+        <tr>
+          <th>Confirm Password </th>
+          <td><input name="pass2" type="password" class="textfield" id="pass2" /></td>
+        </tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td><button class="ask green" type="submit">Submit</button></td>
+        </tr>
+      </table>
     </form>
+
 {% endblock %}
 
